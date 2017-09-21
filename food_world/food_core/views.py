@@ -9,7 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def getUsers(request, pk):
-	print(pk)
 	try:
 		user = User.objects.get(pk = pk)
 	except:
@@ -22,26 +21,37 @@ def getUsers(request, pk):
 	return JsonResponse({"Status Code": "200", 'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number})
 
 def getSnacks(request, pk):
-	snack = models.Snack.objects.get(pk = pk)
+	try:
+		snack = Snack.objects.get(pk = pk)
+	except:
+		return JsonResponse({"Status Code": "404"})
 	name = snack.name
 	description = snack.description
 	price = snack.price
 	nutrition_info = snack.nutrition_info
 	return JsonResponse({"Status Code": "200","Name": name, "Description": description, "Price": price, "Nutrition Info": nutrition_info})
 
-def getCarts(request):
-	cart = models.Cart.objects.get(pk = pk)
+def getCarts(request, pk):
+	try:
+		cart = Cart.objects.get(pk = pk)
+	except:
+		return JsonResponse({"Status Code": "404"})
 	user = cart.user
 	total_price = cart.total_price
 	num_items = cart.num_items
-	return JsonResponse({"User": user, "Total Price": total_price, "Number of Items": num_items})
+	return JsonResponse({"Status Code": "200", "User": user, "Total Price": total_price, "Number of Items": num_items})
 
 def getWishlist(request, pk):
-	wishlist = models.Wishlist.objects.get(pk = pk)
+
+	try:
+		wishlist= Wishlist.objects.get(pk = pk)
+	except:
+		return JsonResponse({"Status Code": "404"})
+
 	user = wishlist.user
 	total_price = wishlist.total_price
 	num_items = wishlist.num_items
-	return JsonResponse({"User": user, "Total Price": total_price, "Number of Items": num_items})
+	return JsonResponse({"Status Code": "200","User": user, "Total Price": total_price, "Number of Items": num_items})
 
 
 @csrf_exempt
@@ -77,9 +87,11 @@ def createSnack(request):
 
 @csrf_exempt
 def createCart(request):
-	user = request.POST.get("User", "No user Provided")
-	total_price = request.POST.get("Total Price", 0.00)
-	num_items  = request.POST.get("Num Items", "No Description Provided")
+	body_unicode = request.body.decode('utf-8')
+	body = json.loads(body_unicode)
+	user = body.get("User", "No user Provided")
+	total_price = body.get("Total Price", 0.00)
+	num_items  = bodybody.get("Num Items", "No Description Provided")
 	
 	new_cart = Cart(user = user, total_price = total_price, num_items = num_items)
 	try:
@@ -91,9 +103,11 @@ def createCart(request):
 
 @csrf_exempt
 def createWishlist(request):
-	user = request.POST.get("User", "No user Provided")
-	total_price = request.POST.get("Total Price", 0.00)
-	num_items  = request.POST.get("Num Items", "No Description Provided")
+	body_unicode = request.body.decode('utf-8')
+	body = json.loads(body_unicode)
+	user = body.get("User", "No user Provided")
+	total_price = body.get("Total Price", 0.00)
+	num_items  = body.get("Num Items", "No Description Provided")
 	
 	new_wishlist = Wishlist(user = user, total_price = total_price, num_items = num_items)
 	try:
