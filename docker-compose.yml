@@ -6,4 +6,4 @@ models:
       - .:/app
     ports:
       - "8001:8000"
-    command: bash -c "mod_wsgi-express start-server --working-directory /app/food_world --reload-on-changes /app/food_world/food_world/wsgi.py"
+    command: bash -c "python /app/food_world/manage.py makemigrations && python /app/food_world/manage.py migrate && mod_wsgi-express start-server --working-directory /app/food_world --reload-on-changes /app/food_world/food_world/wsgi.py"
