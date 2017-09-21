@@ -1,6 +1,12 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.http import JsonResponse
+import json
+from .models import User, Snack, Wishlist, Cart
+from django.views.decorators.csrf import csrf_exempt
 
-ngo.shortcuts import render
+
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 import json
@@ -19,12 +25,17 @@ def getUsers(request, pk):
 	last_name = user.last_name
 	email  = user.email
 	phone_number = user.phone_number
+
 	wishlist = user.wishlist.get()
 
 	wishlist_price = wishlist.total_price
 	wishlist_items = wishlist.num_items
 
 	return JsonResponse({"Status Code": "200", 'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number, "Wishlist": {"Total Price": wishlist_price, "Number of Items": wishlist_items}})
+
+
+	return JsonResponse({"Status Code": "200", 'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number})
+
 
 def getSnacks(request, pk):
 	try:
@@ -47,6 +58,7 @@ def getCarts(request, pk):
 	num_items = cart.num_items
 	return JsonResponse({"Status Code": "200", "User": user, "Total Price": total_price, "Number of Items": num_items})
 
+
 # def getWishlist(request, pk):
 
 # 	try:
@@ -58,6 +70,19 @@ def getCarts(request, pk):
 # 	total_price = wishlist.total_price
 # 	num_items = wishlist.num_items
 # 	return JsonResponse({"Status Code": "200","User": user, "Total Price": total_price, "Number of Items": num_items})
+
+def getWishlist(request, pk):
+
+	try:
+		wishlist= Wishlist.objects.get(pk = pk)
+	except:
+		return JsonResponse({"Status Code": "404"})
+
+	user = wishlist.user
+	total_price = wishlist.total_price
+	num_items = wishlist.num_items
+	return JsonResponse({"Status Code": "200","User": user, "Total Price": total_price, "Number of Items": num_items})
+
 
 
 @csrf_exempt
