@@ -14,7 +14,8 @@ class User(models.Model):
         verbose_name_plural = "Users"
 
     def __str__(self):
-        pass
+        return self.first_name
+
 
 
 class Cart(models.Model):
@@ -26,8 +27,8 @@ class Cart(models.Model):
         verbose_name = "Cart"
         verbose_name_plural = "Carts"
 
-    def __str__(self):
-        pass
+
+ 
 
 
 class Wishlist(models.Model):
@@ -39,8 +40,6 @@ class Wishlist(models.Model):
         verbose_name = "Wishlist"
         verbose_name_plural = "Wus"
 
-    def __str__(self):
-        pass
 
 
 class Snack(models.Model):
@@ -54,9 +53,10 @@ class Snack(models.Model):
     class Meta:
         verbose_name = "Snack"
         verbose_name_plural = "Snacks"
-
+        
     def __str__(self):
-        pass
+        return self.name
+
 
 
 
