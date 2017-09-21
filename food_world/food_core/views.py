@@ -20,14 +20,27 @@ def getUsers(request, pk):
 	email  = user.email
 	phone_number = user.phone_number
 
-	wishlist = user.wishlist.get()
+	try:
+		wishlist = user.wishlist.get()
 
-	wishlist_price = wishlist.total_price
-	wishlist_items = wishlist.num_items
+		wishlist_price = wishlist.total_price
+		wishlist_items = wishlist.num_items
+	except:
+		wishlist = ""
+		wishlist_price = ""
+		wishlist_items = ""
 
-	cart = user.cart.get()
-	cart_price = cart.total_price
-	cart_items = cart.num_items
+
+	try:
+		cart = user.cart.get()
+		cart_price = cart.get()
+		cart_items = cart.num_items
+	except:
+		cart = ""
+		cart_price = ""
+		cart_items = ""
+
+		
 	return JsonResponse({"Status Code": "200", 'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number, "Wishlist": {"Total Price": wishlist_price, "Number of Items": wishlist_items}, "Cart": {"Total Price": cart_price, "Number of Items": cart_items}})
 
 
