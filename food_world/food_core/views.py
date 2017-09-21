@@ -6,12 +6,6 @@ from .models import User, Snack, Wishlist, Cart
 from django.views.decorators.csrf import csrf_exempt
 
 
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import JsonResponse
-import json
-from .models import User, Snack, Wishlist, Cart
-from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -31,10 +25,11 @@ def getUsers(request, pk):
 	wishlist_price = wishlist.total_price
 	wishlist_items = wishlist.num_items
 
-	return JsonResponse({"Status Code": "200", 'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number, "Wishlist": {"Total Price": wishlist_price, "Number of Items": wishlist_items}})
+	cart = user.cart.get()
+	cart_price = cart.total_price
+	cart_items = cart.num_items
+	return JsonResponse({"Status Code": "200", 'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number, "Wishlist": {"Total Price": wishlist_price, "Number of Items": wishlist_items}, "Cart": {"Total Price": cart_price, "Number of Items": cart_items}})
 
-
-	return JsonResponse({"Status Code": "200", 'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number})
 
 
 def getSnacks(request, pk):
@@ -48,15 +43,15 @@ def getSnacks(request, pk):
 	nutrition_info = snack.nutrition_info
 	return JsonResponse({"Status Code": "200","Name": name, "Description": description, "Price": price, "Nutrition Info": nutrition_info})
 
-def getCarts(request, pk):
-	try:
-		cart = Cart.objects.get(pk = pk)
-	except:
-		return JsonResponse({"Status Code": "404"})
-	user = cart.user
-	total_price = cart.total_price
-	num_items = cart.num_items
-	return JsonResponse({"Status Code": "200", "User": user, "Total Price": total_price, "Number of Items": num_items})
+# def getCarts(request, pk):
+# 	try:
+# 		cart = Cart.objects.get(pk = pk)
+# 	except:
+# 		return JsonResponse({"Status Code": "404"})
+# 	user = cart.user
+# 	total_price = cart.total_price
+# 	num_items = cart.num_items
+# 	return JsonResponse({"Status Code": "200", "User": user, "Total Price": total_price, "Number of Items": num_items})
 
 
 # def getWishlist(request, pk):
@@ -71,17 +66,7 @@ def getCarts(request, pk):
 # 	num_items = wishlist.num_items
 # 	return JsonResponse({"Status Code": "200","User": user, "Total Price": total_price, "Number of Items": num_items})
 
-def getWishlist(request, pk):
 
-	try:
-		wishlist= Wishlist.objects.get(pk = pk)
-	except:
-		return JsonResponse({"Status Code": "404"})
-
-	user = wishlist.user
-	total_price = wishlist.total_price
-	num_items = wishlist.num_items
-	return JsonResponse({"Status Code": "200","User": user, "Total Price": total_price, "Number of Items": num_items})
 
 
 

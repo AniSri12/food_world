@@ -7,7 +7,6 @@ from django.db import models
 # Create your models here.
 
 
-
 class User(models.Model):
     first_name = models.CharField(max_length=128, help_text="enter First Name here")
     last_name = models.CharField(max_length=128, help_text="enter Last Name here")
@@ -33,8 +32,6 @@ class Cart(models.Model):
         verbose_name_plural = "Carts"
 
 
- 
-
 
 class Wishlist(models.Model):
     user = models.ForeignKey(User, related_name="wishlist")
@@ -43,13 +40,14 @@ class Wishlist(models.Model):
 
     class Meta:
         verbose_name = "Wishlist"
-        verbose_name_plural = "Wus"
+        verbose_name_plural = "Wishlists"
+
 
 
 
 class Snack(models.Model):
-    carts = models.ManyToManyField(Cart, related_name='cart')
-    wishlists = models.ManyToManyField(Wishlist, related_name='wishlist')
+    carts = models.ManyToManyField(Cart, related_name='cart', null = True, blank = True)
+    wishlists = models.ManyToManyField(Wishlist, related_name='wishlist', null = True, blank = True)
     name = models.CharField(max_length=128, help_text="name of food item")
     price = models.DecimalField(max_digits=6, decimal_places=2)
     description = models.TextField()
@@ -62,8 +60,4 @@ class Snack(models.Model):
     def __str__(self):
 
         return self.name
-
-
-
-
 
