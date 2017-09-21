@@ -17,6 +17,7 @@ class User(models.Model):
         return self.first_name
 
 
+
 class Cart(models.Model):
     user = models.ForeignKey(User, related_name="cart")
     total_price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -25,6 +26,7 @@ class Cart(models.Model):
     class Meta:
         verbose_name = "Cart"
         verbose_name_plural = "Carts"
+
 
  
 
@@ -40,7 +42,6 @@ class Wishlist(models.Model):
 
 
 
-
 class Snack(models.Model):
     carts = models.ManyToManyField(Cart, related_name='cart')
     wishlists = models.ManyToManyField(Wishlist, related_name='wishlist')
@@ -52,9 +53,10 @@ class Snack(models.Model):
     class Meta:
         verbose_name = "Snack"
         verbose_name_plural = "Snacks"
-
+        
     def __str__(self):
         return self.name
+
 
 
 
