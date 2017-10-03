@@ -1,9 +1,40 @@
+
 models:
     image: tp33/django
     external_links:
       -  mysql:db
     volumes:
-      - .:/app
+      - ./food_world/food_world:/app
     ports:
       - "8001:8000"
-    command: bash -c "python /app/food_world/manage.py makemigrations && python /app/food_world/manage.py migrate && python /app/food_world/manage.py loaddata /app/food_world/db.json && mod_wsgi-express start-server --working-directory /app/food_world --reload-on-changes /app/food_world/food_world/wsgi.py"
+    command: "mod_wsgi-express start-server --reload-on-changes ./food_world/food_world/wsgi.py"
+
+exp:
+   image: tp33/django
+   links:
+      - models:food_world
+   ports:
+      - "8002:8000"
+   volumes:
+      - ./food_world_exp_api/food_world_exp_api:/app
+   command: "mod_wsgi-express start-server --reload-on-changes ./food_world_exp_api/food_world_exp_api/wsgi.py"
+
+web:
+   image: tp33/django
+   links:
+      - exp:food_world_exp_api
+   ports:
+      - "8000:8000"
+   volumes:
+      - ./food_world_web/food_world_web:/app
+   command: "mod_wsgi-express start-server --reload-on-changes ./food_world_web/food_world_web/wsgi.py"
+
+
+
+
+
+
+
+
+
+
