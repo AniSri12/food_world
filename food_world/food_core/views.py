@@ -10,6 +10,31 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
+# def getCarts(request, pk):
+# 	try:
+# 		cart = Cart.objects.get(pk = pk)
+# 	except:
+# 		return JsonResponse({"Status Code": "404"})
+# 	user = cart.user
+# 	total_price = cart.total_price
+# 	num_items = cart.num_items
+# 	return JsonResponse({"Status Code": "200", "User": user, "Total Price": total_price, "Number of Items": num_items})
+
+
+# def getWishlist(request, pk):
+
+# 	try:
+# 		wishlist= Wishlist.objects.get(pk = pk)
+# 	except:
+# 		return JsonResponse({"Status Code": "404"})
+
+# 	user = wishlist.user
+# 	total_price = wishlist.total_price
+# 	num_items = wishlist.num_items
+# 	return JsonResponse({"Status Code": "200","User": user, "Total Price": total_price, "Number of Items": num_items})
+
+
+
 def getUsers(request, pk):
 	try:
 		user = User.objects.get(pk = pk)
@@ -56,28 +81,6 @@ def getSnacks(request, pk):
 	nutrition_info = snack.nutrition_info
 	return JsonResponse({"Status Code": "200","Name": name, "Description": description, "Price": price, "Nutrition Info": nutrition_info})
 
-# def getCarts(request, pk):
-# 	try:
-# 		cart = Cart.objects.get(pk = pk)
-# 	except:
-# 		return JsonResponse({"Status Code": "404"})
-# 	user = cart.user
-# 	total_price = cart.total_price
-# 	num_items = cart.num_items
-# 	return JsonResponse({"Status Code": "200", "User": user, "Total Price": total_price, "Number of Items": num_items})
-
-
-# def getWishlist(request, pk):
-
-# 	try:
-# 		wishlist= Wishlist.objects.get(pk = pk)
-# 	except:
-# 		return JsonResponse({"Status Code": "404"})
-
-# 	user = wishlist.user
-# 	total_price = wishlist.total_price
-# 	num_items = wishlist.num_items
-# 	return JsonResponse({"Status Code": "200","User": user, "Total Price": total_price, "Number of Items": num_items})
 
 
 
@@ -86,7 +89,7 @@ def getSnacks(request, pk):
 @csrf_exempt
 def createUser(request):
 	first_name = request.POST.get("First Name", "No First Name Provided")
-	last_name = equest.POST.get("Last Name", "No Last Name Provided")
+	last_name = request.POST.get("Last Name", "No Last Name Provided")
 	email  = request.POST.get("Email", "No Email Provided")
 	phone_number = request.POST.get("Phone Number", "No Phone Number Provided")
 	new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number)
@@ -120,7 +123,7 @@ def createCart(request):
 	body = json.loads(body_unicode)
 	user = body.get("User", "No user Provided")
 	total_price = body.get("Total Price", 0.00)
-	num_items  = bodybody.get("Num Items", "No Description Provided")
+	num_items  = body.get("Num Items", "No Description Provided")
 	
 	new_cart = Cart(user = user, total_price = total_price, num_items = num_items)
 	try:
@@ -144,3 +147,6 @@ def createWishlist(request):
 		return JsonResponse({"Status Code": "200", "NameTest": request.POST})
 	except:
 		return JsonResponse({"Status Code": "500"})
+
+
+
