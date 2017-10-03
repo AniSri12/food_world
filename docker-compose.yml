@@ -1,40 +1,33 @@
 
 models:
+    container_name: food_world
     image: tp33/django
     external_links:
       -  mysql:db
     volumes:
-      - ./food_world/food_world:/app
+      - ./food_world:/app
     ports:
       - "8001:8000"
-    command: "mod_wsgi-express start-server --reload-on-changes ./food_world/food_world/wsgi.py"
+    command:  bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py loaddata db.json && mod_wsgi-express start-server --working-directory ./ --reload-on-changes ./food_world/wsgi.py"
 
 exp:
+   container_name: food_world_exp_api
    image: tp33/django
    links:
-      - models:food_world
+      - models:models-api
    ports:
       - "8002:8000"
    volumes:
-      - ./food_world_exp_api/food_world_exp_api:/app
-   command: "mod_wsgi-express start-server --reload-on-changes ./food_world_exp_api/food_world_exp_api/wsgi.py"
+      - ./food_world_exp_api:/app
+   command: bash -c "mod_wsgi-express start-server --reload-on-changes --log-to-terminal ./food_world_exp_api/wsgi.py"
 
 web:
+   container_name: food_world_web
    image: tp33/django
    links:
-      - exp:food_world_exp_api
+      - exp:exp-api
    ports:
       - "8000:8000"
    volumes:
-      - ./food_world_web/food_world_web:/app
-   command: "mod_wsgi-express start-server --reload-on-changes ./food_world_web/food_world_web/wsgi.py"
-
-
-
-
-
-
-
-
-
-
+      - ./food_world_web:/app
+   command: bash -c "mod_wsgi-express start-server --reload-on-changes --log-to-terminal ./food_world_web/wsgi.py"
