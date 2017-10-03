@@ -148,5 +148,61 @@ def createWishlist(request):
 	except:
 		return JsonResponse({"Status Code": "500"})
 
+def destroyUser(request,pk):
+	try:
+		user = User.objects.get(pk = pk)
+		user.delete()
+	except:
+		return JsonResponse({"Status Code": "404"})
 
+def destroySnack(request,pk):
+	try:
+		snack = Snack.objects.get(pk = pk)
+		snack.delete()
+	except:
+		return JsonResponse({"Status Code": "404"})
+
+def destroyCart(request,pk):
+	try:
+		cart = Cart.objects.get(pk = pk)
+		cart.delete()
+	except:
+		return JsonResponse({"Status Code": "404"})
+
+def destroyWishlist(request,pk):
+	try:
+		wishlist = Wishlist.objects.get(pk = pk)
+		wishlist.delete()
+	except:
+		return JsonResponse({"Status Code": "404"})
+
+
+def updateUser(request,pk):
+	try:
+		user, created = User.objects.update_or_create(
+        pk=pk, defaults=request.body)
+    except:
+		return JsonResponse({"Status Code": "404"})
+
+
+def updateSnack(request,pk):
+	try:
+		snack, created = Snack.objects.update_or_create(
+        pk=pk, defaults=request.body)
+    except:
+		return JsonResponse({"Status Code": "404"})
+
+def updateCart(request,pk):
+	try:
+		cart, created = Cart.objects.update_or_create(
+        pk=pk, defaults=request.body)
+    except:
+		return JsonResponse({"Status Code": "404"})
+
+def updateWishlist(request,pk):
+	try:
+		wishlist, created = Wishlist.objects.update_or_create(
+        pk=pk, defaults=request.body)
+    except:
+		return JsonResponse({"Status Code": "404"})
 
