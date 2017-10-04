@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 from django.db import models
+import datetime
 
 # Create your models here.
 
@@ -50,6 +51,8 @@ class Snack(models.Model):
     wishlists = models.ManyToManyField(Wishlist, related_name='wishlist', null = True, blank = True)
     name = models.CharField(max_length=128, help_text="name of food item")
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    date_created = models.DateField(default=datetime.date.today)
+    country = models.CharField(max_length = 100, default = "Country Not Specified")
     description = models.TextField()
     nutrition_info = models.TextField()
 

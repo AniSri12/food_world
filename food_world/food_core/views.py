@@ -36,54 +36,95 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 def getUsers(request, pk):
-    try:
-        user = User.objects.get(pk = pk)
-    except:
-        return JsonResponse({"Status Code": "404"})
-    first_name = user.first_name
-    last_name = user.last_name
-    email  = user.email
-    phone_number = user.phone_number
+    if request.method == "GET":
+        try:
+            user = User.objects.get(pk = pk)
+        except:
+            return JsonResponse({"Status Code": "404"})
+        first_name = user.first_name
+        last_name = user.last_name
+        email  = user.email
+        phone_number = user.phone_number
 
-    try:
-        wishlist = user.wishlist.get()
+        try:
+            wishlist = user.wishlist.get()
 
-        wishlist_price = wishlist.total_price
-        wishlist_items = wishlist.num_items
-    except:
-        wishlist = ""
-        wishlist_price = ""
-        wishlist_items = ""
+            wishlist_price = wishlist.total_price
+            wishlist_items = wishlist.num_items
+        except:
+            wishlist = ""
+            wishlist_price = ""
+            wishlist_items = ""
 
 
-    try:
-        cart = user.cart.get()
-        cart_price = cart.get()
-        cart_items = cart.num_items
-    except:
-        cart = ""
-        cart_price = ""
-        cart_items = ""
+        try:
+            cart = user.cart.get()
+            cart_price = cart.get()
+            cart_items = cart.num_items
+        except:
+            cart = ""
+            cart_price = ""
+            cart_items = ""
 
-        
-    return JsonResponse({"Status Code": "200", 'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number, "Wishlist": {"Total Price": wishlist_price, "Number of Items": wishlist_items}, "Cart": {"Total Price": cart_price, "Number of Items": cart_items}})
+            
+        return JsonResponse({"Status Code": "200", "Data" : {'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number, "Wishlist": {"Total Price": wishlist_price, "Number of Items": wishlist_items}, "Cart": {"Total Price": cart_price, "Number of Items": cart_items}}})
 
 
 
 def getSnacks(request, pk):
-    try:
-        snack = Snack.objects.get(pk = pk)
-    except:
-        return JsonResponse({"Status Code": "404"})
-    name = snack.name
-    description = snack.description
-    price = snack.price
-    nutrition_info = snack.nutrition_info
-    return JsonResponse({"Status Code": "200","Name": name, "Description": description, "Price": price, "Nutrition Info": nutrition_info})
+    if request.method == "GET":
+        try:
+            snack = Snack.objects.get(pk = pk)
+        except:
+            return JsonResponse({"Status Code": "404"})
+        name = snack.name
+        description = snack.description
+        price = snack.price
+        nutrition_info = snack.nutrition_info
+        return JsonResponse({"Status Code": "200","Data" : {"Name": name, "Description": description, "Price": price, "Nutrition Info": nutrition_info}})
 
 
+def get_all_snacks(request):
+    if request.method == "GET":
+        all_snack_dict = []
+        try:
+            snacks = Snack.objects.all()
+        except:
+            return JsonResponse({"Status Code": "404"})
+
+        for snack in snacks:
+            name = snack.name
+            description = snack.description
+            price = snack.price
+            nutrition_info = snack.nutrition_info
 
 
+            compiled_snack_data = {"Name": name, "Description": description, "Price": price, "Nutrition Info": nutrition_info}
+            all_snack_dict.append(compiled_snack_data)
+        return JsonResponse({"Status Code": "200","Data" : all_snack_dict})
+
+
+def get_all_users(request): #Only returns some user info for home screen
+    if request.method == "GET":
+        all_users_dict = []
+        try:
+            users = User.objects.all()
+        except:
+            return JsonResponse({"Status Code": "404"})
+
+
+        for user in users:
+            first_name = user.first_name
+            last_name = user.last_name
+            email  = user.email
+            phone_number = user.phone_number
+            pk = user.pk
+
+            compiled_user_data = {'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number, "pk": pk}
+            
+        all_users_dict.append(compiled_user_data)
+            
+        return JsonResponse({"Status Code": "200","Data" : all_users_dict})
 
 
 @csrf_exempt
