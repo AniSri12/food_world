@@ -20,3 +20,9 @@ def index(request):
 
 	return JsonResponse(return_data)
 
+def details(request,pk):
+	req_snack = urllib.request.Request('http://models-api:8000/api/v1/snacks/' + pk)
+	resp_snack = urllib.request.urlopen(req_snack).read().decode('utf-8')
+	json_snack = json.loads(resp_snack)
+	return_data = {"Status Code:": 200, "Data": {"Snack": json_snack}}
+	return JsonResponse(return_data)
