@@ -10,17 +10,13 @@ from django.http import JsonResponse
 
 def index(request):
 	print ("About to perform the GET request...")
+	req_snacks = urllib.request.Request('http://models-api:8000/api/v1/snacks/')
+	req_users = urllib.request.Request('http://models-api:8000/api/v1/users/')
+	resp_snacks = urllib.request.urlopen(req_snacks).read().decode('utf-8')
+	resp_users = urllib.request.urlopen(req_users).read().decode('utf-8')
+	json_snacks = json.loads(resp_snacks)
+	json_users = json.loads(resp_users)
+	return_data = {"Status Code:": 200, "Data": {"Users": json_users, "Snacks": json_snacks}}
 
-    req_snacks = urllib.request.Request('http://models-api:8000/api/v1/snacks/')
-    # req_users = urllib.request.Request('localhost:8001/api/v1/users/')
-
-    # resp_snacks = urllib.request.urlopen(req_snacks).read().decode('utf-8')
-    # resp_users = urllib.request.urlopen(req_users).read().decode('utf-8')
-
-    # json_snacks = json.loads(resp_snacks)
-    # json_users = json.loads(resp_users)
-
-    # return_data = {"Status Code:": 200, "Data": {"Users": json_users, "Snacks": json_snacks}}
-
-	return JsonResponse({"Status Code": 200, "Data": {} })
+	return JsonResponse(return_data)
 

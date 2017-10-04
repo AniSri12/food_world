@@ -101,7 +101,7 @@ def get_all_snacks(request):
 
             compiled_snack_data = {"Name": name, "Description": description, "Price": price, "Nutrition Info": nutrition_info}
             all_snack_dict.append(compiled_snack_data)
-        return JsonResponse({"Status Code": "200","Data" : all_snack_dict})
+        return JsonResponse({"Status Code": 200,"Data" : all_snack_dict})
 
 
 def get_all_users(request): #Only returns some user info for home screen
@@ -124,7 +124,7 @@ def get_all_users(request): #Only returns some user info for home screen
             
         all_users_dict.append(compiled_user_data)
             
-        return JsonResponse({"Status Code": "200","Data" : all_users_dict})
+        return JsonResponse({"Status Code": 200,"Data" : all_users_dict})
 
 
 @csrf_exempt
