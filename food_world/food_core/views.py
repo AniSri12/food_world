@@ -14,11 +14,11 @@ from django.views.decorators.csrf import csrf_exempt
 #   try:
 #       cart = Cart.objects.get(pk = pk)
 #   except:
-#       return JsonResponse({"Status Code": "404"})
+#       return JsonResponse({"status_code": "404"})
 #   user = cart.user
 #   total_price = cart.total_price
 #   num_items = cart.num_items
-#   return JsonResponse({"Status Code": "200", "User": user, "Total Price": total_price, "Number of Items": num_items})
+#   return JsonResponse({"status_code": "200", "User": user, "total_price": total_price, "num_items": num_items})
 
 
 # def getWishlist(request, pk):
@@ -26,12 +26,12 @@ from django.views.decorators.csrf import csrf_exempt
 #   try:
 #       wishlist= Wishlist.objects.get(pk = pk)
 #   except:
-#       return JsonResponse({"Status Code": "404"})
+#       return JsonResponse({"status_code": "404"})
 
 #   user = wishlist.user
 #   total_price = wishlist.total_price
 #   num_items = wishlist.num_items
-#   return JsonResponse({"Status Code": "200","User": user, "Total Price": total_price, "Number of Items": num_items})
+#   return JsonResponse({"status_code": "200","User": user, "total_price": total_price, "num_items": num_items})
 
 
 
@@ -40,7 +40,7 @@ def getUsers(request, pk):
         try:
             user = User.objects.get(pk = pk)
         except:
-            return JsonResponse({"Status Code": "404"})
+            return JsonResponse({"status_code": "404"})
         first_name = user.first_name
         last_name = user.last_name
         email  = user.email
@@ -67,7 +67,7 @@ def getUsers(request, pk):
             cart_items = ""
 
             
-        return JsonResponse({"Status Code": "200", "Data" : {'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number, "Wishlist": {"Total Price": wishlist_price, "Number of Items": wishlist_items}, "Cart": {"Total Price": cart_price, "Number of Items": cart_items}}})
+        return JsonResponse({"status_code": "200", "Data" : {'first_name': first_name, "last_name": last_name, "email": email, "phone_number": phone_number, "Wishlist": {"total_price": wishlist_price, "num_items": wishlist_items}, "Cart": {"total_price": cart_price, "num_items": cart_items}}})
 
 
 
@@ -76,12 +76,12 @@ def getSnacks(request, pk):
         try:
             snack = Snack.objects.get(pk = pk)
         except:
-            return JsonResponse({"Status Code": "404"})
+            return JsonResponse({"status_code": "404"})
         name = snack.name
         description = snack.description
         price = snack.price
         nutrition_info = snack.nutrition_info
-        return JsonResponse({"Status Code": "200","Data" : {"Name": name, "Description": description, "Price": price, "Nutrition Info": nutrition_info}})
+        return JsonResponse({"status_code": "200","Data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info}})
 
 
 def get_all_snacks(request):
@@ -90,7 +90,7 @@ def get_all_snacks(request):
         try:
             snacks = Snack.objects.all()
         except:
-            return JsonResponse({"Status Code": "404"})
+            return JsonResponse({"status_code": "404"})
 
         for snack in snacks:
             name = snack.name
@@ -99,9 +99,9 @@ def get_all_snacks(request):
             nutrition_info = snack.nutrition_info
 
 
-            compiled_snack_data = {"Name": name, "Description": description, "Price": price, "Nutrition Info": nutrition_info}
+            compiled_snack_data = {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info}
             all_snack_dict.append(compiled_snack_data)
-        return JsonResponse({"Status Code": 200,"Data" : all_snack_dict})
+        return JsonResponse({"status_code": 200,"Data" : all_snack_dict})
 
 
 def get_all_users(request): #Only returns some user info for home screen
@@ -110,7 +110,7 @@ def get_all_users(request): #Only returns some user info for home screen
         try:
             users = User.objects.all()
         except:
-            return JsonResponse({"Status Code": "404"})
+            return JsonResponse({"status_code": "404"})
 
 
         for user in users:
@@ -120,42 +120,42 @@ def get_all_users(request): #Only returns some user info for home screen
             phone_number = user.phone_number
             pk = user.pk
 
-            compiled_user_data = {'First Name': first_name, "Last Name": last_name, "email": email, "Phone Number": phone_number, "pk": pk}
+            compiled_user_data = {'first_name': first_name, "last_name": last_name, "email": email, "phone_number": phone_number, "pk": pk}
             
         all_users_dict.append(compiled_user_data)
             
-        return JsonResponse({"Status Code": 200,"Data" : all_users_dict})
+        return JsonResponse({"status_code": 200,"Data" : all_users_dict})
 
 
 @csrf_exempt
 def createUser(request):
-    first_name = request.POST.get("First Name", "No First Name Provided")
-    last_name = request.POST.get("Last Name", "No Last Name Provided")
+    first_name = request.POST.get("first_name", "No first_name Provided")
+    last_name = request.POST.get("last_name", "No last_name Provided")
     email  = request.POST.get("Email", "No Email Provided")
-    phone_number = request.POST.get("Phone Number", "No Phone Number Provided")
+    phone_number = request.POST.get("phone_number", "No phone_number Provided")
     new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number)
     
     try:
         new_user.save()
-        return JsonResponse({"Status Code": "200"})
+        return JsonResponse({"status_code": "200"})
     except:
-        return JsonResponse({"Status Code": "500"})
+        return JsonResponse({"status_code": "500"})
 
 @csrf_exempt
 def createSnack(request):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
-    name = body.get("Name", "No Name Provided")
-    description  = body.get("Description", "No Description Provided")
-    price = body.get("Price", 0.00)
-    nutrition_info = body.get("Nutrition Info","No Nutrition Info Provided")
+    name = body.get("name", "No name Provided")
+    description  = body.get("description", "No description Provided")
+    price = body.get("price", 0.00)
+    nutrition_info = body.get("nutrition_info","No nutrition_info Provided")
     new_snack = Snack(name = name, description = description, price = price, nutrition_info = nutrition_info)
 
     try:
         new_snack.save()
-        return JsonResponse({"Status Code": "200"})
+        return JsonResponse({"status_code": "200"})
     except:
-        return JsonResponse({"Status Code": "500"})
+        return JsonResponse({"status_code": "500"})
 
 
 @csrf_exempt
@@ -163,15 +163,15 @@ def createCart(request):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     user = body.get("User", "No user Provided")
-    total_price = body.get("Total Price", 0.00)
-    num_items  = body.get("Num Items", "No Description Provided")
+    total_price = body.get("total_price", 0.00)
+    num_items  = body.get("Num Items", "No description Provided")
     
     new_cart = Cart(user = user, total_price = total_price, num_items = num_items)
     try:
         new_cart.save()
-        return JsonResponse({"Status Code": "200", "NameTest": request.POST})
+        return JsonResponse({"status_code": "200", "nameTest": request.POST})
     except:
-        return JsonResponse({"Status Code": "500"})
+        return JsonResponse({"status_code": "500"})
 
 
 @csrf_exempt
@@ -179,43 +179,43 @@ def createWishlist(request):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
     user = body.get("User", "No user Provided")
-    total_price = body.get("Total Price", 0.00)
-    num_items  = body.get("Num Items", "No Description Provided")
+    total_price = body.get("total_price", 0.00)
+    num_items  = body.get("Num Items", "No description Provided")
     
     new_wishlist = Wishlist(user = user, total_price = total_price, num_items = num_items)
     try:
         new_wishlist.save()
-        return JsonResponse({"Status Code": "200", "NameTest": request.POST})
+        return JsonResponse({"status_code": "200", "nameTest": request.POST})
     except:
-        return JsonResponse({"Status Code": "500"})
+        return JsonResponse({"status_code": "500"})
 
 def destroyUser(request,pk):
     try:
         user = User.objects.get(pk = pk)
         user.delete()
     except:
-        return JsonResponse({"Status Code": "404"})
+        return JsonResponse({"status_code": "404"})
 
 def destroySnack(request,pk):
     try:
         snack = Snack.objects.get(pk = pk)
         snack.delete()
     except:
-        return JsonResponse({"Status Code": "404"})
+        return JsonResponse({"status_code": "404"})
 
 def destroyCart(request,pk):
     try:
         cart = Cart.objects.get(pk = pk)
         cart.delete()
     except:
-        return JsonResponse({"Status Code": "404"})
+        return JsonResponse({"status_code": "404"})
 
 def destroyWishlist(request,pk):
     try:
         wishlist = Wishlist.objects.get(pk = pk)
         wishlist.delete()
     except:
-        return JsonResponse({"Status Code": "404"})
+        return JsonResponse({"status_code": "404"})
 
 
 def updateUser(request,pk):
@@ -223,7 +223,7 @@ def updateUser(request,pk):
         user, created = User.objects.update_or_create(
         pk=pk, defaults=request.body)
     except:
-        return JsonResponse({"Status Code": "404"})
+        return JsonResponse({"status_code": "404"})
 
 
 def updateSnack(request,pk):
@@ -231,19 +231,19 @@ def updateSnack(request,pk):
         snack, created = Snack.objects.update_or_create(
         pk=pk, defaults=request.body)
     except:
-        return JsonResponse({"Status Code": "404"})
+        return JsonResponse({"status_code": "404"})
 
 def updateCart(request,pk):
     try:
         cart, created = Cart.objects.update_or_create(
         pk=pk, defaults=request.body)
     except:
-        return JsonResponse({"Status Code": "404"})
+        return JsonResponse({"status_code": "404"})
 
 def updateWishlist(request,pk):
     try:
         wishlist, created = Wishlist.objects.update_or_create(
         pk=pk, defaults=request.body)
     except:
-        return JsonResponse({"Status Code": "404"})
+        return JsonResponse({"status_code": "404"})
 
