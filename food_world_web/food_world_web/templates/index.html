@@ -20,23 +20,24 @@
 	
 	<div style="position: relative;">
 		<p style="text-align: left; font-weight: bold;margin-left: 10px"> All Snacks</p>
-		<tr>
+		
 		{% for snack in context.snacks.data %}
 			<a href="/snacks/{{ snack.pk }}">
 			<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
-				<td><div class="panel-heading"> {{ snack.name }}</div></td>
-	  			<td><div class="panel-body"> {{ snack.description }}</div></td>
+			
+				<div class="panel-heading"> {{ snack.name }}</div>
+	  			<div class="panel-body"> {{ snack.description }}</div>
 			</div>
 			</a>
 		{% endfor %}
-		</tr>
+		
 	</div>
 
 	<br>
-	<p style="text-align: left; font-weight: bold;margin-left: 10px; float: left; position: relative;top:160px; right: 340px;"> Meet Our Wonderful Users!</p>
+	<p style="text-align: left; font-weight: bold;margin-left: 10px; float: left;top:160px; right: 340px;"> Meet Our Wonderful Users!</p>
 
 
-	<div style="position: relative; top:200px; right: 535px;">
+	<div style="position: relative; top:50px; right: 535px;">
 
 		{% for user in context.users.data %}
 			<a href="/users/{{ user.pk }}">
