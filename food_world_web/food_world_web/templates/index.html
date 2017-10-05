@@ -19,14 +19,33 @@
   	</nav>
 		
 	<p style="text-align: center;"> Food Just Went Global!</p>
-	<p style="text-align: left; font-weight: bold;margin-left: 10px"> All Snacks</p>
+	
+	<div style="position: relative;">
+		<p style="text-align: left; font-weight: bold;margin-left: 10px"> All Snacks</p>
+		{% for snack in Context.Snacks.Data %}
+			<a href="#">
+			<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
+				<div class="panel-heading"> {{ snack.name }}</div>
+	  			<div class="panel-body"> {{ snack.description }}</div>
+			</div>
+			</a>
+		{% endfor %}
+	</div>
 
-	{% for snack in Context.Snacks.Data %}
-		<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
-			<div class="panel-heading"> {{ snack.name }}</div>
-  			<div class="panel-body"> {{ snack.description }}</div>
-		</div>
-		
-	{% endfor %}
+	<br>
+	<p style="text-align: left; font-weight: bold;margin-left: 10px; float: left; position: relative;top:160px; right: 340px;"> Meet Our Wonderful Users!</p>
+
+
+	<div style="position: relative; top:200px; right: 535px;">
+
+		{% for user in Context.Users.Data %}
+			<a href="/users/{{ user.pk }}">
+			<div class="panel panel-warning" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
+				<div class="panel-heading"> {{ user.first_name }} {{ user.last_name }}</div>
+	  			<div class="panel-body"> {{ user.email }}</div>
+			</div>
+			</a>
+		{% endfor %}
+	</div>
 </body>
 </html>
