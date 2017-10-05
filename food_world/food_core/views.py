@@ -12,16 +12,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 def getCarts(request, pk):
     try:
-    cart = Cart.objects.get(pk = pk)
+        cart = Cart.objects.get(pk = pk)
     except:
         return JsonResponse({"status_code": "404"})
-    user = cart.user
-    total_price = cart.total_price
-    num_items = cart.num_items
-    return JsonResponse({"status_code": "200", "User": user, "total_price": total_price, "num_items": num_items})
+        user = cart.user
+        total_price = cart.total_price
+        num_items = cart.num_items
+        return JsonResponse({"status_code": "200", "User": user, "total_price": total_price, "num_items": num_items})
 
 
-def getWishlist(request, pk):
+def getWishlists(request, pk):
 
     try:
         wishlist= Wishlist.objects.get(pk = pk)
@@ -68,8 +68,7 @@ def getUsers(request, pk):
 
             
         return JsonResponse({"status_code": "200", "data" : {'first_name': first_name, "last_name": last_name, "email": email, "phone_number": phone_number, "Wishlist": {"total_price": wishlist_price, "num_items": wishlist_items}, "Cart": {"total_price": cart_price, "num_items": cart_items}}})
-    return JsonResponse({"status_code": 500})
-
+    
 
 def getSnacks(request, pk):
     if request.method == "GET":
@@ -82,7 +81,7 @@ def getSnacks(request, pk):
         price = snack.price
         nutrition_info = snack.nutrition_info
         return JsonResponse({"status_code": "200","data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info}})
-    return JsonResponse({"status_code": 500})
+    
 
 def get_all_snacks(request):
     if request.method == "GET":
@@ -102,7 +101,6 @@ def get_all_snacks(request):
             compiled_snack_data = {"pk" : snack.pk, "name": name, "description": description, "price": price, "nutrition_info": nutrition_info}
             all_snack_dict.append(compiled_snack_data)
         return JsonResponse({"status_code": 200,"data" : all_snack_dict})
-    return JsonResponse({"status_code": 500})
 
 def get_all_users(request): #Only returns some user info for home screen
     if request.method == "GET":
@@ -125,7 +123,6 @@ def get_all_users(request): #Only returns some user info for home screen
             all_users_dict.append(compiled_user_data)
             
         return JsonResponse({"status_code": 200,"data" : all_users_dict})
-    return JsonResponse({"status_code": 500})
 
 
 @csrf_exempt

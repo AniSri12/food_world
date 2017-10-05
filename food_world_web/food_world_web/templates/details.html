@@ -13,21 +13,21 @@
 	    </div>
 	    <ul class="nav navbar-nav">
 	      <li><a href="#">Newest Foods</a></li>
-	      <li><a href="#">Snack by Country</a></li>
+	      <li><a href="#">snack by Country</a></li>
 	      <li><a href="#">User</a></li>
 	    </ul>
   	</nav>
- {% if Context.Snack.Data.name != None %}
+ {% if context.snack.data.name != "" %}
 <div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
 
 <div class="panel-heading"> 
-{{ Context.Snack.Data.name }}
+{{ context.snack.data.name }}
 </div>
 </div>
 		<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
-			<div class="panel-heading"> Info: {{ Context.Snack.Data.description }}</div>
-			<div class="panel-heading"> ${{Context.Snack.Data.price }}</div>
-			<div class="panel-heading"> Nutrition info: {{ Context.Snack.Data.nutrition_info }}</div>
+			<div class="panel-heading"> Info: {{ context.snack.data.description }}</div>
+			<div class="panel-heading"> ${{context.snack.data.price }}</div>
+			<div class="panel-heading"> Nutrition info: {{ context.snack.data.nutrition_info }}</div>
   			
 		</div>
 {% endif %}
