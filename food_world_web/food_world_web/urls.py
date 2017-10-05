@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index),
     url(r'^snacks/(?P<pk>\d+)', views.details),
+    url(r'^snacks/sorted/', views.sort),
 ]

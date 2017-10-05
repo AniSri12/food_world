@@ -20,3 +20,10 @@ def details(request,pk):
 	resp = json.loads(resp_details)
 	context = resp["data"]
 	return render(request, 'details.html', {"context" : context })
+
+def sort(request):
+	req_details= urllib.request.Request('http://exp-api:8000/api/v1/sorted/')
+	resp_details= urllib.request.urlopen(req_details).read().decode('utf-8')
+	resp = json.loads(resp_details)
+	context = resp["data"]
+	return render(request, 'sorted.html', {"context" : context })

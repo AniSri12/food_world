@@ -26,7 +26,7 @@ def sort(request):
 	resp_snacks = urllib.request.urlopen(req_snacks).read().decode('utf-8')
 	json_snacks = json.loads(resp_snacks)
 	newlist = sorted(json_snacks['data'], key=lambda k: k['country']) 
-	return_data = {"status_code:": 200, "snacks": newlist}
+	return_data = {"status_code:": 200, "data": newlist}
 
 	return JsonResponse(return_data)
 

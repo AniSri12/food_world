@@ -9,28 +9,29 @@
 	<nav class="navbar navbar-default" style="background-color: #cef7f2">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
-	      <a class="navbar-brand" href="http://localhost:8000">Food World</a>
+	      <a class="navbar-brand">Food World</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li><a href="#">Newest Foods</a></li>
-	      <li><a href="#">snack by Country</a></li>
-	      <li><a href="#">User</a></li>
+	      <li><a href="/">Home</a></li>
+	      <li><a href="/snacks/sorted/">Snack by Country</a></li>
 	    </ul>
   	</nav>
- {% if context.snack.data.name != "" %}
-<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
-
-<div class="panel-heading"> 
-{{ context.snack.data.name }}
-</div>
-</div>
+	{% if context.snack.data.name != None %}
 		<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
-			<div class="panel-heading"> Info: {{ context.snack.data.description }}</div>
-			<div class="panel-heading"> ${{context.snack.data.price }}</div>
-			<div class="panel-heading"> Nutrition info: {{ context.snack.data.nutrition_info }}</div>
-  			
+
+		<div class="panel-heading"> 
+		{{ context.snack.data.name }}
 		</div>
-{% endif %}
+		</div>
+				<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
+					<div class="panel-heading"> Info: {{ context.snack.data.description }}</div>
+					<div class="panel-heading"> ${{context.snack.data.price }}</div>
+					<div class="panel-heading"> Nutrition info: {{ context.snack.data.nutrition_info }}</div>
+					<div class="panel-heading"> Country: {{ context.snack.data.country }}</div>
+		  			
+	{% else %}
+		<p> Whoops! This item does not exist. </p>	
+	{% endif %}
 		
 	
 </html>
