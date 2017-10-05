@@ -237,11 +237,19 @@ def updateUser(request,pk):
 @csrf_exempt
 def updateSnack(request,pk):
     try:
-        snack, created = Snack.objects.update_or_create(
-        pk=pk, defaults=request.POST)
+        snack = Snack.objects.get(pk = pk)
+        for key, value in request.POST:
+            snack.key = value
+        snack.save()
         return JsonResponse({"status_code": "200","data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info}})
     except:
         return JsonResponse({"status_code": "500"})
+    # try:
+    #     snack, created = Snack.objects.update_or_create(
+    #     pk=pk, defaults=request.POST)
+    #     return JsonResponse({"status_code": "200","data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info}})
+    # except:
+    #     return JsonResponse({"status_code": "500"})
 
 @csrf_exempt
 def updateCart(request,pk):
