@@ -225,7 +225,7 @@ def destroyWishlist(request,pk):
 
 @csrf_exempt
 def updateUser(request,pk):
-    if Snack.objects.all().filter(pk=pk).exists():
+    if User.objects.all().filter(pk=pk).exists():
         user = User.objects.get(pk = pk)
         for key, value in request.POST.items():
             setattr(user,key,value)
