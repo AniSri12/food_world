@@ -189,6 +189,8 @@ def createWishlist(request):
     except:
         return JsonResponse({"status_code": "500"})
 
+
+@csrf_exempt
 def destroyUser(request,pk):
     try:
         user = User.objects.get(pk = pk)
@@ -196,6 +198,7 @@ def destroyUser(request,pk):
     except:
         return JsonResponse({"status_code": "404"})
 
+@csrf_exempt
 def destroySnack(request,pk):
     try:
         snack = Snack.objects.get(pk = pk)
@@ -203,6 +206,7 @@ def destroySnack(request,pk):
     except:
         return JsonResponse({"status_code": "404"})
 
+@csrf_exempt
 def destroyCart(request,pk):
     try:
         cart = Cart.objects.get(pk = pk)
@@ -210,6 +214,7 @@ def destroyCart(request,pk):
     except:
         return JsonResponse({"status_code": "404"})
 
+@csrf_exempt
 def destroyWishlist(request,pk):
     try:
         wishlist = Wishlist.objects.get(pk = pk)
@@ -217,7 +222,7 @@ def destroyWishlist(request,pk):
     except:
         return JsonResponse({"status_code": "404"})
 
-
+@csrf_exempt
 def updateUser(request,pk):
     try:
         user, created = User.objects.update_or_create(
@@ -225,7 +230,7 @@ def updateUser(request,pk):
     except:
         return JsonResponse({"status_code": "404"})
 
-
+@csrf_exempt
 def updateSnack(request,pk):
     try:
         snack, created = Snack.objects.update_or_create(
@@ -233,6 +238,7 @@ def updateSnack(request,pk):
     except:
         return JsonResponse({"status_code": "404"})
 
+@csrf_exempt
 def updateCart(request,pk):
     try:
         cart, created = Cart.objects.update_or_create(
@@ -240,6 +246,7 @@ def updateCart(request,pk):
     except:
         return JsonResponse({"status_code": "404"})
 
+@csrf_exempt
 def updateWishlist(request,pk):
     try:
         wishlist, created = Wishlist.objects.update_or_create(
