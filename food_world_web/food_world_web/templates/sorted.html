@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<head>
+	<title>Food World!</title>
+</head>
+<body style="background-color: #f2f2f2">
+	<nav class="navbar navbar-default" style="background-color: #cef7f2">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Food World</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="/">Home</a></li>
+	      <li><a href="localhost:8000/snacks/sorted/">Snack by Country</a></li>
+	    </ul>
+  	</nav>
+		
+	<p style="text-align: center;"> Foods Sorted by Country </p>
+	
+	<div style="position: relative;">
+		<!-- <p style="text-align: left; font-weight: bold;margin-left: 10px"> All Snacks</p> -->
+		{% for snack in context %}
+			<a href="/snacks/{{ snack.pk }}">
+			<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
+				<div class="panel-heading"> {{ snack.name }} - {{ snack.country }}</div>
+	  			<div class="panel-body"> {{ snack.description }}</div>
+			</div>
+			</a>
+		{% endfor %}
+	</div>
+</body>
+</html>
