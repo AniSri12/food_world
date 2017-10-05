@@ -20,11 +20,11 @@
 		
 	<p style="text-align: center;"> Food Just Went Global!</p>
 	<p style="text-align: left; font-weight: bold;margin-left: 10px"> All Snacks</p>
-{{Context.Snacks.Data}}
+
 	{% for snack in Context.Snacks.Data %}
 		<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
-			<div class="panel-heading"> {{ snack.Name }}</div>
-  			<div class="panel-body"> {{ snack.Description }}</div>
+			<div class="panel-heading"> {{ snack.name }}</div>
+  			<div class="panel-body"> {{ snack.description }}</div>
 		</div>
 		
 	{% endfor %}
