@@ -20,14 +20,16 @@
 	
 	<div style="position: relative;">
 		<p style="text-align: left; font-weight: bold;margin-left: 10px"> All Snacks</p>
+		<tr>
 		{% for snack in context.snacks.data %}
 			<a href="/snacks/{{ snack.pk }}">
 			<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
-				<div class="panel-heading"> {{ snack.name }}</div>
-	  			<div class="panel-body"> {{ snack.description }}</div>
+				<td><div class="panel-heading"> {{ snack.name }}</div></td>
+	  			<td><div class="panel-body"> {{ snack.description }}</div></td>
 			</div>
 			</a>
 		{% endfor %}
+		</tr>
 	</div>
 
 	<br>
@@ -38,12 +40,26 @@
 
 		{% for user in context.users.data %}
 			<a href="/users/{{ user.pk }}">
-			<div class="panel panel-warning" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
-				<div class="panel-heading"> {{ user.first_name }} {{ user.last_name }}</div>
-	  			<div class="panel-body"> {{ user.email }}</div>
+			
+
+        	<div class="col" style="width: 95%">
+			<div class="panel panel-warning" style="margin:0;float:right;" >
+			
+			
+				<div class="panel-heading" style="width: 100%" > {{ user.first_name }} {{ user.last_name }}</div>
+		
+				
+
+	  			 <div class="panel-body"> {{ user.email }}</div> 
+	  			 
+
 			</div>
+			</div>
+
+			
 			</a>
 		{% endfor %}
+		
 	</div>
 </body>
 </html>
