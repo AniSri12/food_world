@@ -20,6 +20,16 @@ def index(request):
 
 	return JsonResponse(return_data)
 
+def sort(request):
+	print ("About to perform the GET request...")
+	req_snacks = urllib.request.Request('http://models-api:8000/api/v1/snacks/')
+	resp_snacks = urllib.request.urlopen(req_snacks).read().decode('utf-8')
+	json_snacks = json.loads(resp_snacks)
+	newlist = sorted(json_snacks['data'], key=lambda k: k['country']) 
+	return_data = {"status_code:": 200, "snacks": newlist}
+
+	return JsonResponse(return_data)
+
 def details(request,pk):
 	req_snack = urllib.request.Request('http://models-api:8000/api/v1/snacks/' + pk)
 	resp_snack = urllib.request.urlopen(req_snack).read().decode('utf-8')

@@ -80,7 +80,8 @@ def getSnacks(request, pk):
         description = snack.description
         price = snack.price
         nutrition_info = snack.nutrition_info
-        return JsonResponse({"status_code": "200","data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info}})
+        country = snack.country
+        return JsonResponse({"status_code": "200","data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info, "country": country}})
     
 
 def get_all_snacks(request):
@@ -96,9 +97,10 @@ def get_all_snacks(request):
             description = snack.description
             price = snack.price
             nutrition_info = snack.nutrition_info
+            country = snack.country
 
 
-            compiled_snack_data = {"pk" : snack.pk, "name": name, "description": description, "price": price, "nutrition_info": nutrition_info}
+            compiled_snack_data = {"pk" : snack.pk, "name": name, "description": description, "price": price, "nutrition_info": nutrition_info, "country": country}
             all_snack_dict.append(compiled_snack_data)
         return JsonResponse({"status_code": 200,"data" : all_snack_dict})
 
@@ -147,6 +149,7 @@ def createSnack(request):
     description  = body.get("description", "No description Provided")
     price = body.get("price", 0.00)
     nutrition_info = body.get("nutrition_info","No nutrition_info Provided")
+    country = body.get("country", "No nutrition_info Provided")
     new_snack = Snack(name = name, description = description, price = price, nutrition_info = nutrition_info)
 
     try:
