@@ -99,7 +99,7 @@ def get_all_snacks(request):
             nutrition_info = snack.nutrition_info
 
 
-            compiled_snack_data = {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info}
+            compiled_snack_data = {"pk" : snack.pk, "name": name, "description": description, "price": price, "nutrition_info": nutrition_info}
             all_snack_dict.append(compiled_snack_data)
         return JsonResponse({"status_code": 200,"Data" : all_snack_dict})
 
