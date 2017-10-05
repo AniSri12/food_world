@@ -143,14 +143,12 @@ def createUser(request):
 
 @csrf_exempt
 def createSnack(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    name = body.get("name", "No name Provided")
-    description  = body.get("description", "No description Provided")
-    price = body.get("price", 0.00)
-    nutrition_info = body.get("nutrition_info","No nutrition_info Provided")
-    country = body.get("country", "No nutrition_info Provided")
-    new_snack = Snack(name = name, description = description, price = price, nutrition_info = nutrition_info)
+    name = request.POST.get("name", "No name Provided")
+    description  = request.POST.get("description", "No description Provided")
+    price = request.POST.get("price", 0.00)
+    nutrition_info = request.POST.get("nutrition_info","No nutrition_info Provided")
+    country = request.POST.get("country", "No nutrition_info Provided")
+    new_snack = Snack(name = name, description = description, price = price, nutrition_info = nutrition_info, country=country)
 
     try:
         new_snack.save()
@@ -161,32 +159,29 @@ def createSnack(request):
 
 @csrf_exempt
 def createCart(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    user = body.get("User", "No user Provided")
-    total_price = body.get("total_price", 0.00)
-    num_items  = body.get("Num Items", "No description Provided")
+
+    user = request.POST.get("User", "No user Provided")
+    total_price = request.POST.get("total_price", 0.00)
+    num_items  = request.POST.get("Num Items", "No description Provided")
     
     new_cart = Cart(user = user, total_price = total_price, num_items = num_items)
     try:
         new_cart.save()
-        return JsonResponse({"status_code": "200", "nameTest": request.POST})
+        return JsonResponse({"status_code": "200"})
     except:
         return JsonResponse({"status_code": "500"})
 
 
 @csrf_exempt
 def createWishlist(request):
-    body_unicode = request.body.decode('utf-8')
-    body = json.loads(body_unicode)
-    user = body.get("User", "No user Provided")
-    total_price = body.get("total_price", 0.00)
-    num_items  = body.get("Num Items", "No description Provided")
+    user = request.POST.get("User", "No user Provided")
+    total_price = request.POST.get("total_price", 0.00)
+    num_items  = request.POST.get("Num Items", "No description Provided")
     
     new_wishlist = Wishlist(user = user, total_price = total_price, num_items = num_items)
     try:
         new_wishlist.save()
-        return JsonResponse({"status_code": "200", "nameTest": request.POST})
+        return JsonResponse({"status_code": "200"})
     except:
         return JsonResponse({"status_code": "500"})
 
@@ -206,6 +201,7 @@ def destroySnack(request,pk):
     try:
         snack = Snack.objects.get(pk = pk)
         snack.delete()
+        return JsonResponse({"status_code": "200"})
     except:
         return JsonResponse({"status_code": "500"})
 
@@ -214,6 +210,7 @@ def destroyCart(request,pk):
     try:
         cart = Cart.objects.get(pk = pk)
         cart.delete()
+        return JsonResponse({"status_code": "200"})
     except:
         return JsonResponse({"status_code": "500"})
 
@@ -222,66 +219,64 @@ def destroyWishlist(request,pk):
     try:
         wishlist = Wishlist.objects.get(pk = pk)
         wishlist.delete()
+        return JsonResponse({"status_code": "200"})
     except:
         return JsonResponse({"status_code": "500"})
 
 @csrf_exempt
 def updateUser(request,pk):
-    try:
+    if Snack.objects.all().filter(pk=pk).exists():
         user = User.objects.get(pk = pk)
-        first_name = user.first_name
-        last_name = user.last_name
-        email  = user.email
-        phone_number = user.phone_number
         for key, value in request.POST.items():
-            user.key = value
+            setattr(user,key,value)
         user.save()
         return JsonResponse({"status_code": "200", "data" : {'first_name': user.first_name, "last_name": user.last_name, "email": user.email, "phone_number": user.phone_number}})
-    except:
+    else:
         return JsonResponse({"status_code": "500"})
 
 @csrf_exempt
 def updateSnack(request,pk):
-    try:
+    if Snack.objects.all().filter(pk=pk).exists():
         snack = Snack.objects.get(pk = pk)
+        for key, value in request.POST.items():
+             setattr(snack,key,value)
+        snack.save()
         name = snack.name
         description = snack.description
         price = snack.price
         nutrition_info = snack.nutrition_info
         country = snack.country
-        for key, value in request.POST.items():
-            snack.key = value
-        snack.save()
         return JsonResponse({"status_code": "200","data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info, "country": country}})
 
-    except:
+    else:
         return JsonResponse({"status_code": "500"})
 
 @csrf_exempt
 def updateCart(request,pk):
-    try:
+    if Cart.objects.all().filter(pk=pk).exists():
         cart = Cart.objects.get(pk = pk)
+        for key, value in request.POST.items():
+            setattr(cart,key,value)
+        cart.save()
         user = cart.user
         total_price = cart.total_price
         num_items = cart.num_items
-        for key, value in request.POST.items():
-            cart.key = value
-        cart.save()
         return JsonResponse({"status_code": "200", "User": user, "total_price": total_price, "num_items": num_items})
-    except:
+    else:
         return JsonResponse({"status_code": "500"})
 
 @csrf_exempt
 def updateWishlist(request,pk):
-    try:
+    if Wishlist.objects.all().filter(pk=pk).exists():
         wishlist= Wishlist.objects.get(pk = pk)
+        for key, value in request.POST.items():
+            setattr(wishlist,key,value)
+        wishlist.save()
+        
         user = wishlist.user
         total_price = wishlist.total_price
         num_items = wishlist.num_items
-        for key, value in request.POST.items():
-            wishlist.key = value
-        wishlist.save()
         return JsonResponse({"status_code": "200","User": user, "total_price": total_price, "num_items": num_items})
-    except:
+    else:
         return JsonResponse({"status_code": "500"})
 
