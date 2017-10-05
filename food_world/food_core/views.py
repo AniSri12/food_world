@@ -228,8 +228,14 @@ def destroyWishlist(request,pk):
 @csrf_exempt
 def updateUser(request,pk):
     try:
-        user, created = User.objects.update_or_create(
-        pk=pk, defaults=request.POST)
+        user = User.objects.get(pk = pk)
+        first_name = user.first_name
+        last_name = user.last_name
+        email  = user.email
+        phone_number = user.phone_number
+        for key, value in request.POST.items():
+            user.key = value
+        user.save()
         return JsonResponse({"status_code": "200", "data" : {'first_name': user.first_name, "last_name": user.last_name, "email": user.email, "phone_number": user.phone_number}})
     except:
         return JsonResponse({"status_code": "500"})
@@ -238,24 +244,29 @@ def updateUser(request,pk):
 def updateSnack(request,pk):
     try:
         snack = Snack.objects.get(pk = pk)
-        for key, value in request.POST:
+        name = snack.name
+        description = snack.description
+        price = snack.price
+        nutrition_info = snack.nutrition_info
+        country = snack.country
+        for key, value in request.POST.items():
             snack.key = value
         snack.save()
-        return JsonResponse({"status_code": "200","data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info}})
+        return JsonResponse({"status_code": "200","data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info, "country": country}})
+
     except:
         return JsonResponse({"status_code": "500"})
-    # try:
-    #     snack, created = Snack.objects.update_or_create(
-    #     pk=pk, defaults=request.POST)
-    #     return JsonResponse({"status_code": "200","data" : {"name": name, "description": description, "price": price, "nutrition_info": nutrition_info}})
-    # except:
-    #     return JsonResponse({"status_code": "500"})
 
 @csrf_exempt
 def updateCart(request,pk):
     try:
-        cart, created = Cart.objects.update_or_create(
-        pk=pk, defaults=request.POST)
+        cart = Cart.objects.get(pk = pk)
+        user = cart.user
+        total_price = cart.total_price
+        num_items = cart.num_items
+        for key, value in request.POST.items():
+            cart.key = value
+        cart.save()
         return JsonResponse({"status_code": "200", "User": user, "total_price": total_price, "num_items": num_items})
     except:
         return JsonResponse({"status_code": "500"})
@@ -263,8 +274,13 @@ def updateCart(request,pk):
 @csrf_exempt
 def updateWishlist(request,pk):
     try:
-        wishlist, created = Wishlist.objects.update_or_create(
-        pk=pk, defaults=request.POST)
+        wishlist= Wishlist.objects.get(pk = pk)
+        user = wishlist.user
+        total_price = wishlist.total_price
+        num_items = wishlist.num_items
+        for key, value in request.POST.items():
+            wishlist.key = value
+        wishlist.save()
         return JsonResponse({"status_code": "200","User": user, "total_price": total_price, "num_items": num_items})
     except:
         return JsonResponse({"status_code": "500"})
