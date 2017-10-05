@@ -17,7 +17,9 @@
 	      <li><a href="#">User</a></li>
 	    </ul>
   	</nav>
+ {% if Context.Snack.Data.name != None %}
 <div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
+
 <div class="panel-heading"> 
 {{ Context.Snack.Data.name }}
 </div>
@@ -28,6 +30,7 @@
 			<div class="panel-heading"> Nutrition info: {{ Context.Snack.Data.nutrition_info }}</div>
   			
 		</div>
+{% endif %}
 		
 	
 </html>
