@@ -4,6 +4,7 @@ from django.http import JsonResponse
 import json
 from .models import User, Snack, Wishlist, Cart
 from django.views.decorators.csrf import csrf_exempt
+from django.forms.models import model_to_dict
 
 
 
@@ -15,10 +16,10 @@ def getCarts(request, pk):
         cart = Cart.objects.get(pk = pk)
     except:
         return JsonResponse({"status_code": "404"})
-        user = cart.user
-        total_price = cart.total_price
-        num_items = cart.num_items
-        return JsonResponse({"status_code": "200", "User": user, "total_price": total_price, "num_items": num_items})
+    user = cart.user
+    total_price = cart.total_price
+    num_items = cart.num_items
+    return JsonResponse({"status_code": "200", "User": model_to_dict(user), "total_price": total_price, "num_items": num_items})
 
 
 def getWishlists(request, pk):
@@ -31,7 +32,7 @@ def getWishlists(request, pk):
     user = wishlist.user
     total_price = wishlist.total_price
     num_items = wishlist.num_items
-    return JsonResponse({"status_code": "200","User": user, "total_price": total_price, "num_items": num_items})
+    return JsonResponse({"status_code": "200", "User": model_to_dict(user), "total_price": total_price, "num_items": num_items} )
 
 
 
@@ -137,7 +138,7 @@ def createUser(request):
     
     try:
         new_user.save()
-        return JsonResponse({"status_code": "200"})
+        return JsonResponse({"status_code": "200", 'id': new_user.id})
     except:
         return JsonResponse({"status_code": "500"})
 
@@ -152,17 +153,18 @@ def createSnack(request):
 
     try:
         new_snack.save()
-        return JsonResponse({"status_code": "200"})
+        return JsonResponse({"status_code": "200"},)
     except:
         return JsonResponse({"status_code": "500"})
 
 
 @csrf_exempt
 def createCart(request):
-
-    user = request.POST.get("User", "No user Provided")
+    pk = request.POST.get("User", "No user Provided")
+    user_item = User.objects.get(pk=pk)
+    user = user_item
     total_price = request.POST.get("total_price", 0.00)
-    num_items  = request.POST.get("Num Items", "No description Provided")
+    num_items  = request.POST.get("num_items", "No description Provided")
     
     new_cart = Cart(user = user, total_price = total_price, num_items = num_items)
     try:
@@ -174,9 +176,11 @@ def createCart(request):
 
 @csrf_exempt
 def createWishlist(request):
-    user = request.POST.get("User", "No user Provided")
+    pk = request.POST.get("User", "No user Provided")
+    user_item = User.objects.get(pk=pk)
+    user = user_item
     total_price = request.POST.get("total_price", 0.00)
-    num_items  = request.POST.get("Num Items", "No description Provided")
+    num_items  = request.POST.get("num_items", "No description Provided")
     
     new_wishlist = Wishlist(user = user, total_price = total_price, num_items = num_items)
     try:
@@ -261,7 +265,7 @@ def updateCart(request,pk):
         user = cart.user
         total_price = cart.total_price
         num_items = cart.num_items
-        return JsonResponse({"status_code": "200", "User": user, "total_price": total_price, "num_items": num_items})
+        return JsonResponse({"status_code": "200", "User": model_to_dict(user), "total_price": total_price, "num_items": num_items})
     else:
         return JsonResponse({"status_code": "500"})
 
@@ -276,7 +280,7 @@ def updateWishlist(request,pk):
         user = wishlist.user
         total_price = wishlist.total_price
         num_items = wishlist.num_items
-        return JsonResponse({"status_code": "200","User": user, "total_price": total_price, "num_items": num_items})
+        return JsonResponse({"status_code": "200","User": model_to_dict(user), "total_price": total_price, "num_items": num_items})
     else:
         return JsonResponse({"status_code": "500"})
 

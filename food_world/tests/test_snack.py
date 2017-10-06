@@ -45,8 +45,8 @@ class snackTest(TestCase):
 
     def test_delete_snack(self):
         response = self.client.post(reverse('destroy_snack', kwargs={'pk': 1}))
-        self.assertFalse(Snack.objects.all().filter(pk=1).exists(), msg="User did not actually get deleted in db with API!")
-        self.assertEquals(response.json()['status_code'], str(200), msg="User not deleted!")
+        self.assertFalse(Snack.objects.all().filter(pk=1).exists(), msg="Snack did not actually get deleted in db with API!")
+        self.assertEquals(response.json()['status_code'], str(200), msg="Snack not deleted!")
 
     def test_get_invalid_snack(self):
         response = self.client.get(reverse('get_snacks', kwargs={'pk':2}))
@@ -55,7 +55,7 @@ class snackTest(TestCase):
 
     def test_delete_invalid_snack(self):
         response = self.client.post(reverse('destroy_snack', kwargs={'pk': 7}))
-        self.assertEquals(response.json()['status_code'], str(500), msg="Snack that shouldn't exits, got deleted")
+        self.assertEquals(response.json()['status_code'], str(500), msg="Snack that shouldn't exists, got deleted")
         
 
     def test_update_invalid_snack(self):

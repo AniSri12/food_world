@@ -18,18 +18,16 @@ class userTest(TestCase):
             'phone_number': '531-225-7765',
         }
         response = self.client.post(reverse('create_user'),data)
-        self.assertTrue(User.objects.all().filter(pk=2).exists(), msg="Object did not actually get created in db with API!")
+        self.assertTrue(User.objects.all().filter(pk=int(response.json()['id'])).exists(), msg="Object did not actually get created in db with API!")
         self.assertEquals(response.json()['status_code'], str(200), msg="Return status code is not 200! Error with create_user API!")
 
     def test_get_all_users(self):
         response = self.client.get(reverse('get_all_users'))
         self.assertContains(response, 'data' , msg_prefix= str(response.json()))
-        pass
 
     def test_get_user(self):
         response = self.client.get(reverse('get_users', kwargs={'pk': 1}))
         self.assertContains(response, 'data', msg_prefix = str(response.json()))
-        pass
 
     #Change First Name of created object in set up
     def test_update_user(self):
@@ -38,7 +36,6 @@ class userTest(TestCase):
          }
         
         response = self.client.post(reverse('update_user', kwargs={'pk': 1}),data)
-        print(response.json())
         self.assertTrue(User.objects.all().filter(first_name='Mark').exists(), msg="User did not actually get updated with new name!")
         self.assertEquals(response.json()['data']['first_name'], 'Mark', msg="Change did not happen! Error")
 
@@ -62,9 +59,8 @@ class userTest(TestCase):
          }
         
         response = self.client.post(reverse('update_user', kwargs={'pk': 5}),data)
-        print(response.json())
         self.assertFalse(User.objects.all().filter(first_name='Mark').exists(), msg="User did not actually get updated with new name!")
-        self.assertNotContains(response.json()['data']['first_name'], 'Mark', msg_prefix="Change did not happen! Error")
+        self.assertNotContains(response, 'data' , msg_prefix="Change did not happen! Error")
 
     #tearDown method is called after each test
     def tearDown(self):
