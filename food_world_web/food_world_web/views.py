@@ -4,6 +4,7 @@ import urllib.request
 import urllib.parse
 import json
 from django.http import JsonResponse
+from . import forms
 
 
 def index(request):
@@ -11,7 +12,7 @@ def index(request):
 	resp_home= urllib.request.urlopen(req_home).read().decode('utf-8')
 	resp = json.loads(resp_home)
 	context = resp["data"]
-	return render(request, 'index.html', {"context" : context })
+	return render(request, 'index.html', {"context" : context} )
 
 
 def details(request,pk):
@@ -27,3 +28,7 @@ def sort(request):
 	resp = json.loads(resp_details)
 	context = resp["data"]
 	return render(request, 'sorted.html', {"context" : context })
+
+def login(request):
+	login_form = forms.LoginForm()
+	return render(request, 'login.html', {"context": login_form})

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<head>
+	<title>Log In</title>
+</head>
+<body style="background-color: #f2f2f2">
+	<nav class="navbar navbar-default" style="background-color: #cef7f2">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand">Food World</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="/">Home</a></li>
+	    </ul>
+  	</nav>
+		
+	<p style="text-align: center;"> Returning User? Log in!</p>
+	<br>
+	<form>
+		{{ context.as_p }}
+		<button type="submit">Log In</button>
+	</form>
+		
+</body>
+</html>

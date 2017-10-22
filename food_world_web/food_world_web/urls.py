@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^snacks/(?P<pk>\d+)', views.details),
     url(r'^snacks/sorted/', views.sort),
+    url(r'^login/', views.login),
 ]
