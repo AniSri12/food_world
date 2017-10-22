@@ -32,3 +32,18 @@ def sort(request):
 def login(request):
 	login_form = forms.LoginForm()
 	return render(request, 'login.html', {"context": login_form})
+
+def register(request):
+	register_form = forms.RegisterForm()
+	return render(request, 'register.html', {"context": register_form})
+
+def create_snack(request):
+	create_Snack_form = forms.CreateSnackForm()
+	return render(request, 'createSnack.html', {"context": create_Snack_form})
+
+
+
+
+
+
+
