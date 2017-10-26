@@ -12,8 +12,8 @@ class User(models.Model):
     first_name = models.CharField(max_length=128, help_text="enter First Name here")
     last_name = models.CharField(max_length=128, help_text="enter Last Name here")
     email = models.EmailField()
-    phone_number = models.CharField(max_length=128)
-    password = models.CharField(max_length=128)
+    phone_number = models.CharField(max_length=128, default = "")
+    password = models.CharField(max_length=128, default = "")
 
     class Meta:
         verbose_name = "User"
@@ -66,8 +66,8 @@ class Snack(models.Model):
         return self.name
 
 
-class Authenticator(models.Model):
-    user_id = models.IntegerField(max_digits = 100)
-    authenticator = models.IntegerField(max_digits = 1000)
-    date_created = models.DateField(default=datetime.date.today)
-    pk = authenticator
+# class Authenticator(models.Model):
+#     user_id = models.IntegerField(max_digits = 100)
+#     authenticator = models.IntegerField(max_digits = 1000)
+#     date_created = models.DateField(default=datetime.date.today)
+#     pk = authenticator
