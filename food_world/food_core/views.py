@@ -57,7 +57,8 @@ def check_user_login(request):
             return JsonResponse({"status_code" : '200'})
         except:
             return JsonResponse({'status_code' : '404'})
-
+    else:
+            return JsonResponse({'status_code' : '500'})
 
 def getUsers(request, pk):
     if request.method == "GET":

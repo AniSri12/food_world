@@ -46,8 +46,8 @@ def validate_user(request):
 	password = request.POST['password']
 
 	data = {'first_name' : first_name, 'last_name': last_name, 'password': password}
-	resp = urllib.request.Request(url, data= data)
-
+	post = urllib.request.Request(url, data= data)
+	resp = json.loads(post)
 	if resp['status_code'] == "200":
 		return 'ok'
 	else:

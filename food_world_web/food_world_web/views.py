@@ -49,7 +49,9 @@ def login(request):
 
 	url = 'http://exp-api:8000/api/v1/users/check_login/'
 	data = {'first_name' : first_name, 'last_name': last_name, 'password': password}
-	resp = urllib.request.Request(url, data= data)
+	post = urllib.request.Request(url, data= data)
+	resp = json.loads(post)
+	response = resp['status_code']
 	if response != 'ok':
 	# Couldn't log them in, send them back to login page with error
 		return render(request,'login.html', {"context": login_formm })
