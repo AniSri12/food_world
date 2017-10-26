@@ -2,11 +2,21 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 import json
-from .models import User, Snack, Wishlist, Cart
+from .models import User, Snack, Wishlist, Cart, Authenticator
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 from django.contrib.auth import hashers
+import os
+import hmac
+from food_world.food_world import settings
 
+def generateAuthenticator():
+    authenticator = hmac.new(
+            key = settings.SECRET_KEY.encode('utf-8'),
+            msg = os.urandom(32),
+            digestmod = 'sha256',
+        ).hexdigest()
+    return authenticator
 
 
 
@@ -140,7 +150,13 @@ def createUser(request):
     email  = request.POST.get("Email", "No Email Provided")
     password  = request.POST.get("password")
     phone_number = request.POST.get("phone_number", "No phone_number Provided")
-    new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number, password = hashers.make_password(password))
+
+
+    #### Greate Authenticator Model####
+    new_auth = Authenticator(user_id = pk, authenticator = generateAuthenticator())
+
+
+    new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number, password = hashers.make_password(password), authenticator = authenticator)
     
     try:
         new_user.save()
