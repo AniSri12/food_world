@@ -17,7 +17,7 @@
 		
 	<p style="text-align: center;"> Returning User? Log in!</p>
 	<br>
-	<form>
+	<form method="post" action = '/login/'>
 		{{ context.as_p }}
 		<button type="submit" style="float: left; margin-right: 10px ">Log In</button>
 		<button style="float: left;">Sign Up</button>

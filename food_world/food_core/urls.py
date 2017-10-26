@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^carts/(?P<pk>\d+)', views.getCarts, name = "get_carts"),
     url(r'^snacks/', views.get_all_snacks, name = "get_all_snacks"),
     url(r'^users/', views.get_all_users, name = "get_all_users"),
+    url(r'^users/check_login', views.check_user_login, name = "check_login"),
   
 ]

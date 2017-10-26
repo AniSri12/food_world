@@ -14,7 +14,7 @@ class User(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=128, default = "")
     password = models.CharField(max_length=128, default = "")
-    authenticator = models.OneToOneField("Authenticator")
+    authenticator = models.OneToOneField("Authenticator", null = True)
 
     class Meta:
         verbose_name = "User"

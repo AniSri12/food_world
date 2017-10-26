@@ -8,7 +8,7 @@ from django.forms.models import model_to_dict
 from django.contrib.auth import hashers
 import os
 import hmac
-from food_world.food_world import settings
+import food_world.settings
 
 def generateAuthenticator():
     authenticator = hmac.new(
@@ -45,6 +45,18 @@ def getWishlists(request, pk):
     num_items = wishlist.num_items
     return JsonResponse({"status_code": "200", "User": model_to_dict(user), "total_price": total_price, "num_items": num_items} )
 
+
+def check_user_login(request):
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+
+        try:
+            user = User.objects.get(first_name = first_name, last_name = last_name, password = hashers.check_password(password))
+            return JsonResponse({"status_code" : '200'})
+        except:
+            return JsonResponse({'status_code' : '404'})
 
 
 def getUsers(request, pk):
@@ -305,8 +317,4 @@ def updateWishlist(request,pk):
         return JsonResponse({"status_code": "200","User": model_to_dict(user), "total_price": total_price, "num_items": num_items})
     else:
         return JsonResponse({"status_code": "500"})
-
-
-
-
 

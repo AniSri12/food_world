@@ -19,10 +19,10 @@ from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.index),
+    url(r'^$', views.index, name = 'home'),
     url(r'^snacks/(?P<pk>\d+)', views.details),
     url(r'^snacks/sorted/', views.sort),
-    url(r'^login/', views.login),
+    url(r'^login/', views.login, name='login'),
     url(r'^register/', views.register),
     url(r'^create_snack/', views.create_snack),
 ]

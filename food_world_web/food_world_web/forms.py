@@ -1,7 +1,8 @@
 from django import forms
 
 class LoginForm(forms.Form):
-	name = forms.CharField()
+	first_name = forms.CharField()
+	last_name = forms.CharField()
 	password = forms.CharField()
 
 

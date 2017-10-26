@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 import urllib.request
 import urllib.parse
 import json
 from django.http import JsonResponse
 from . import forms
+from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
 
 
 def index(request):
@@ -29,9 +32,37 @@ def sort(request):
 	context = resp["data"]
 	return render(request, 'sorted.html', {"context" : context })
 
+@csrf_exempt
 def login(request):
 	login_form = forms.LoginForm()
-	return render(request, 'login.html', {"context": login_form})
+	next = request.GET.get('next') or reverse('home')
+	if request.method == 'GET':	
+		return render(request, 'login.html', {"context": login_form})
+
+	if not login_form.is_valid():
+		return render(request,'login.html', {"context": login_form})
+
+
+	# first_name = login_form.cleaned_data['first_name']
+	# last_name = login_form.cleaned_data['last_name']
+	# password = login_form.cleaned_data['password']
+
+	url = 'http://exp-api:8000/api/v1/users/check_login/'
+	data = {'first_name' : first_name, 'last_name': last_name, 'password': password}
+	resp = urllib.request.Request(url, data= data)
+	if response != 'ok':
+	# Couldn't log them in, send them back to login page with error
+		return render(request,'login.html', {"context": login_formm })
+
+	# Set their login cookie and redirect to back to wherever they came from
+	authenticator = resp['resp']['authenticator']
+
+	response = HttpResponseRedirect(next)
+	response.set_cookie("auth", authenticator)
+
+	return response
+
+
 
 def register(request):
 	register_form = forms.RegisterForm()
@@ -40,8 +71,6 @@ def register(request):
 def create_snack(request):
 	create_Snack_form = forms.CreateSnackForm()
 	return render(request, 'createSnack.html', {"context": create_Snack_form})
-
-
 
 
 

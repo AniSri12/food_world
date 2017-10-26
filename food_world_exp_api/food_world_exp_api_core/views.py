@@ -3,7 +3,7 @@ import urllib.request
 import urllib.parse
 import json
 from django.http import JsonResponse
-
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -36,3 +36,19 @@ def details(request,pk):
 	json_snack = json.loads(resp_snack)
 	return_data = {"status_code:": 200, "data": {"snack": json_snack}}
 	return JsonResponse(return_data)
+
+
+@csrf_exempt
+def validate_user(request):
+	url = 'http://models-api:8000/api/v1/login/'
+	first_name = request.POST['first_name']
+	last_name = request.POST['last_name']
+	password = request.POST['password']
+
+	data = {'first_name' : first_name, 'last_name': last_name, 'password': password}
+	resp = urllib.request.Request(url, data= data)
+
+	if resp['status_code'] == "200":
+		return 'ok'
+	else:
+		return 'invalid'
