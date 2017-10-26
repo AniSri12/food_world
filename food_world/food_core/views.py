@@ -5,6 +5,7 @@ import json
 from .models import User, Snack, Wishlist, Cart
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
+from django.contrib.auth import hashers
 
 
 
@@ -46,6 +47,10 @@ def getUsers(request, pk):
         last_name = user.last_name
         email  = user.email
         phone_number = user.phone_number
+        password = user.password
+
+        if hashers.check_password(password) == False:
+            return JsonResponse({"status_code": "403"})
 
         try:
             wishlist = user.wishlist.get()
@@ -133,8 +138,9 @@ def createUser(request):
     first_name = request.POST.get("first_name", "No first_name Provided")
     last_name = request.POST.get("last_name", "No last_name Provided")
     email  = request.POST.get("Email", "No Email Provided")
+    password  = request.POST.get("password")
     phone_number = request.POST.get("phone_number", "No phone_number Provided")
-    new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number)
+    new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number, password = hashers.make_password(password))
     
     try:
         new_user.save()
@@ -283,4 +289,8 @@ def updateWishlist(request,pk):
         return JsonResponse({"status_code": "200","User": model_to_dict(user), "total_price": total_price, "num_items": num_items})
     else:
         return JsonResponse({"status_code": "500"})
+
+
+
+
 
