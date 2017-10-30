@@ -17,10 +17,12 @@
 		
 	<p style="text-align: center;"> Give us Some Info About Your Yummy Snack</p>
 	<br>
-	<form>
+
+	<p>  {{ return_status }}<p>
+
+	<form method="post" action = '/create_snack/'>
 		{{ context.as_p }}
-		<button type="submit" style="float: left; margin-right: 10px ">Log In</button>
-		<button style="float: left;">Sign Up</button>
+		<button type="submit" style="float: left; margin-right: 10px ">Create Snack</button>
 	</form>
 		
 </body>

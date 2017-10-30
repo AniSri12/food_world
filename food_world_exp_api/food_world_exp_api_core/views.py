@@ -60,4 +60,31 @@ def validate_user(request):
 				return JsonResponse({'status_code': '200', 'auth' : json_auth ['data']['auth']})
 	return JsonResponse({'status_code': '404'})
 
+@csrf_exempt
+def create_snack(request):
+	url = 'http://models-api:8000/api/v1/snacks/create'
+
+	req_auths = urllib.request.Request('http://models-api:8000/api/v1/auths/')
+	resp_auths = urllib.request.urlopen(req_auths).read().decode('utf-8')
+	json_auths = json.loads(resp_auths)['data']
+
+	name = request.POST.get("name", "No name Provided")
+	description  = request.POST.get("description", "No description Provided")
+	price = request.POST.get("price", 0.00)
+	nutrition_info = request.POST.get("nutrition_info","No nutrition_info Provided")
+	country = request.POST.get("country", "No nutrition_info Provided")
+	auth = request.POST.get("auth", "No Auth Provided")
+	for authenticator in json_auths:
+		if authenticator["authenticator"] == auth:
+			data = {'name' : name, 'description': description, 'price': price, 'nutrition_info': nutrition_info, 'country' : country}
+			data = bytes( urllib.parse.urlencode( data ).encode() )
+			handler = urllib.request.urlopen(url, data);
+	
+
+			post_feedback = handler.read().decode('utf-8')
+			resp = json.loads(post_feedback)
+			return JsonResponse(resp)
+
+	return JsonResponse({'status_code': '403'})
+
 

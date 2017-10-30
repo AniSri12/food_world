@@ -82,18 +82,29 @@ def register(request):
 def create_snack(request):
 	create_Snack_form = forms.CreateSnackForm()
 	auth = request.COOKIES.get('auth')
+
 	if not auth:
 		return HttpResponseRedirect(reverse("login"))
 	if request.method == 'GET':
 		return render(request, 'createSnack.html', {"context": create_Snack_form})
 
-    # Otherwise, create a new form instance with our POST data
+	url = 'http://exp-api:8000/api/v1/create_snack/'
 
+	name = request.POST.get("name", "No name Provided")
+	description  = request.POST.get("description", "No description Provided")
+	price = request.POST.get("price", 0.00)
+	nutrition_info = request.POST.get("nutrition_info","No nutrition_info Provided")
+	country = request.POST.get("country", "No nutrition_info Provided")
+	data = {'name' : name, 'description': description, 'price': price, 'nutrition_info': nutrition_info, 'country':country, 'auth': auth}
+	data = bytes( urllib.parse.urlencode( data ).encode() )
+	handler = urllib.request.urlopen(url, data);
 
+	post_feedback = handler.read().decode('utf-8')
+	resp = json.loads(post_feedback)
+	response = resp['status_code']
 
-	return render(request, 'createSnack.html', {"context": create_Snack_form})
+	if response != '200':
+		return render(request, 'createSnack.html', {"context": create_Snack_form, 'return_status': "Whoops! There has Been An Error Processing Your Request"})
 
-
-
-
+	return render(request, 'createSnack.html', {"context": create_Snack_form, 'return_status': "Success! Your Snack Has Been Created!"})
 

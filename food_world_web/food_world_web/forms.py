@@ -16,9 +16,9 @@ class RegisterForm(forms.Form):
 
 class CreateSnackForm(forms.Form):
 	name = forms.CharField()
-	price = forms.CharField()
+	nutricional_info = forms.CharField()
 	country = forms.CharField()
 	description = forms.CharField()
-	nutricional_info = forms.DecimalField(max_digits=6, decimal_places=2)
+	price = forms.DecimalField(max_digits=6, decimal_places=2)
 
 

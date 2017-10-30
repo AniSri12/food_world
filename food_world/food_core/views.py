@@ -335,3 +335,20 @@ def generate_authenticator(request, pk):
     else:
         return JsonResponse({"status_code": "500"})
 
+def getAuthenticators(request):
+ if request.method == "GET":
+        all_auth_dict = []
+        try:
+            auths = Authenticator.objects.all()
+        except:
+            return JsonResponse({"status_code": "404"})
+
+        for auth in auths:
+            authenticator = auth.authenticator
+            user_id = auth.user_id
+
+
+            compiled_auth_data = {"authenticator": authenticator, "user_id": user_id}
+            all_auth_dict.append(compiled_auth_data)
+        return JsonResponse({"status_code": 200,"data" : all_auth_dict})
+
