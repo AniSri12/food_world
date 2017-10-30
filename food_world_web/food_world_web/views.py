@@ -36,6 +36,14 @@ def sort(request):
 def login(request):
 	login_form = forms.LoginForm(request.POST)
 	next = request.GET.get('next') or reverse('home')
+
+	auth = request.COOKIES.get('auth')
+
+	if auth:
+		response = HttpResponseRedirect(reverse('home'))
+		return response
+
+
 	if request.method == 'GET':	
 		return render(request, 'login.html', {"context": login_form})
 
@@ -73,6 +81,10 @@ def login(request):
 	return response
 
 
+def logout(request):
+	response = HttpResponseRedirect(reverse('home'))
+	response.delete_cookie('auth')
+	return response
 
 def register(request):
 	register_form = forms.RegisterForm()
@@ -107,4 +119,6 @@ def create_snack(request):
 		return render(request, 'createSnack.html', {"context": create_Snack_form, 'return_status': "Whoops! There has Been An Error Processing Your Request"})
 
 	return render(request, 'createSnack.html', {"context": create_Snack_form, 'return_status': "Success! Your Snack Has Been Created!"})
+
+
 
