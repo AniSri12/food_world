@@ -9,7 +9,7 @@ from . import forms
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
-
+@csrf_exempt
 def index(request):
 	req_home= urllib.request.Request('http://exp-api:8000/api/v1/')
 	resp_home= urllib.request.urlopen(req_home).read().decode('utf-8')
@@ -52,7 +52,7 @@ def login(request):
 	data = bytes( urllib.parse.urlencode( data ).encode() )
 	handler = urllib.request.urlopen(url, data);
 	
-	
+
 	post_feedback = handler.read().decode('utf-8')
 	resp = json.loads(post_feedback)
 	response = resp['status_code']
@@ -61,10 +61,14 @@ def login(request):
 		return render(request,'login.html', {"context": login_form , "error" : "Error! Invalid Login"})
 
 	# Set their login cookie and redirect to back to wherever they came from
-	#authenticator = resp['resp']['authenticator']
+	authenticator = resp['auth']
+
 
 	response = HttpResponseRedirect(reverse('home'))
-	#response.set_cookie("auth", authenticator)
+
+
+
+	response.set_cookie("auth", authenticator)
 
 	return response
 
@@ -74,9 +78,19 @@ def register(request):
 	register_form = forms.RegisterForm()
 	return render(request, 'register.html', {"context": register_form})
 
-
+@csrf_exempt
 def create_snack(request):
 	create_Snack_form = forms.CreateSnackForm()
+	auth = request.COOKIES.get('auth')
+	if not auth:
+		return HttpResponseRedirect(reverse("login"))
+	if request.method == 'GET':
+		return render(request, 'createSnack.html', {"context": create_Snack_form})
+
+    # Otherwise, create a new form instance with our POST data
+
+
+
 	return render(request, 'createSnack.html', {"context": create_Snack_form})
 
 
