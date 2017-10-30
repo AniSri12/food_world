@@ -34,7 +34,7 @@ def sort(request):
 
 @csrf_exempt
 def login(request):
-	login_form = forms.LoginForm()
+	login_form = forms.LoginForm(request.POST)
 	next = request.GET.get('next') or reverse('home')
 	if request.method == 'GET':	
 		return render(request, 'login.html', {"context": login_form})
@@ -43,24 +43,26 @@ def login(request):
 		return render(request,'login.html', {"context": login_form})
 
 
-	# first_name = login_form.cleaned_data['first_name']
-	# last_name = login_form.cleaned_data['last_name']
-	# password = login_form.cleaned_data['password']
+	first_name = login_form.cleaned_data['first_name']
+	last_name = login_form.cleaned_data['last_name']
+	password = login_form.cleaned_data['password']
 
 	url = 'http://exp-api:8000/api/v1/login/'
 	data = {'first_name' : first_name, 'last_name': last_name, 'password': password}
-	post = urllib.request.Request(url, data= data, headers={'Content-Type': 'application/json'})
-	post_feedback = urllib.request.urlopen(post).read().decode('utf-8')
+	data = bytes( urllib.parse.urlencode( data ).encode() )
+	handler = urllib.request.urlopen(url, data);
+	
+	post_feedback = handler.read().decode('utf-8')
 	resp = json.loads(post_feedback)
 	response = resp['status_code']
 	if response != '200':
 	# Couldn't log them in, send them back to login page with error
-		return render(request,'login.html', {"context": login_formm })
+		return render(request,'login.html', {"context": login_form , "error" : "Error! Invalid Login"})
 
 	# Set their login cookie and redirect to back to wherever they came from
 	#authenticator = resp['resp']['authenticator']
 
-	response = HttpResponseRedirect('/register/')
+	response = HttpResponseRedirect(reverse('home'))
 	#response.set_cookie("auth", authenticator)
 
 	return response
@@ -70,6 +72,7 @@ def login(request):
 def register(request):
 	register_form = forms.RegisterForm()
 	return render(request, 'register.html', {"context": register_form})
+
 
 def create_snack(request):
 	create_Snack_form = forms.CreateSnackForm()

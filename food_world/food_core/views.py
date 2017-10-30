@@ -171,7 +171,7 @@ def createUser(request):
 
     new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number, password = hashers.make_password(password))
     new_user.save()
-    new_auth = Authenticator(user_id = new_user.pk, authenticator = 1234)
+    new_auth = Authenticator(user_id = new_user.pk, authenticator = generateAuthenticator())
     new_auth.save()
     new_user.authenticator = new_auth
     
