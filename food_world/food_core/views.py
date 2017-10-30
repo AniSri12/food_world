@@ -98,6 +98,9 @@ def getUsers(request, pk):
         return JsonResponse({"status_code": "200", "data" : {'first_name': first_name, "last_name": last_name, "email": email, "phone_number": phone_number, "Wishlist": {"total_price": wishlist_price, "num_items": wishlist_items}, "Cart": {"total_price": cart_price, "num_items": cart_items}}})
     
 
+
+
+
 def getSnacks(request, pk):
     if request.method == "GET":
         try:
@@ -318,6 +321,17 @@ def updateWishlist(request,pk):
         total_price = wishlist.total_price
         num_items = wishlist.num_items
         return JsonResponse({"status_code": "200","User": model_to_dict(user), "total_price": total_price, "num_items": num_items})
+    else:
+        return JsonResponse({"status_code": "500"})
+
+def generate_authenticator(request, pk):
+    if User.objects.all().filter(pk=pk).exists():
+        user = User.objects.get(pk = pk)
+        new_auth = Authenticator(user_id = pk, authenticator = generateAuthenticator())
+        new_auth.save()
+        user.authenticator = new_auth
+        user.save()
+        return JsonResponse({"status_code": "200","data" : {'auth' : new_auth.authenticator}})
     else:
         return JsonResponse({"status_code": "500"})
 

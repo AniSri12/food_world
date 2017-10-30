@@ -51,10 +51,13 @@ def validate_user(request):
 	password = request.POST['password']
 
 	for user in json_users:
-		if user['first_name'] == first_name and user['last_name'] == last_name and hashers.check_password(password, user['password']):
-			return JsonResponse({'status_code': '200'})
+		if user['first_name'] == first_name and user['last_name'] == last_name and hashers.check_password(password, user['password']):			
+			authenticator = urllib.request.Request('http://models-api:8000/api/v1/create_auth/' + str(user['pk']) )
+			resp_auth = urllib.request.urlopen(authenticator).read().decode('utf-8')
+			json_auth = json.loads(resp_auth)
 
-
+			if json_auth ['status_code'] == '200':
+				return JsonResponse({'status_code': '200', 'auth' : json_auth ['data']['auth']})
 	return JsonResponse({'status_code': '404'})
 
 
