@@ -71,11 +71,7 @@ def login(request):
 	# Set their login cookie and redirect to back to wherever they came from
 	authenticator = resp['auth']
 
-
 	response = HttpResponseRedirect(reverse('home'))
-
-
-
 	response.set_cookie("auth", authenticator)
 
 	return response
@@ -86,9 +82,41 @@ def logout(request):
 	response.delete_cookie('auth')
 	return response
 
+
+@csrf_exempt
 def register(request):
-	register_form = forms.RegisterForm()
-	return render(request, 'register.html', {"context": register_form})
+	register_form = forms.RegisterForm(request.POST)
+	if request.method == 'GET':	
+		return render(request, 'register.html', {"context": register_form})
+
+
+	if not register_form.is_valid():
+		return render(request,'register.html', {"context": register_form, "error" : "Error! Invalid form"})
+
+	first_name = register_form.cleaned_data['first_name']
+	last_name = register_form.cleaned_data['last_name']
+	password = register_form.cleaned_data['password']
+	email = register_form.cleaned_data['password']
+	phone_number = register_form.cleaned_data['phone_number']
+
+
+	url = 'http://exp-api:8000/api/v1/register/'
+	data = {'first_name' : first_name, 'last_name': last_name, 'password': password, 'email': email, 'phone_number': phone_number}
+	data = bytes( urllib.parse.urlencode( data ).encode() )
+	handler = urllib.request.urlopen(url, data);
+	
+
+	post_feedback = handler.read().decode('utf-8')
+	resp = json.loads(post_feedback)
+	response = resp['status_code']
+
+
+	if response != '200':
+		# Couldn't log them in, send them back to login page with error
+			return render(request,'register.html', {"context": register_form, "error" : "Error! Invalid Registration"})
+	
+	response = HttpResponseRedirect(reverse('login'))
+	return response
 
 @csrf_exempt
 def create_snack(request):
@@ -110,6 +138,7 @@ def create_snack(request):
 	data = {'name' : name, 'description': description, 'price': price, 'nutrition_info': nutrition_info, 'country':country, 'auth': auth}
 	data = bytes( urllib.parse.urlencode( data ).encode() )
 	handler = urllib.request.urlopen(url, data);
+
 
 	post_feedback = handler.read().decode('utf-8')
 	resp = json.loads(post_feedback)

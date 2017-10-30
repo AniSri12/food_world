@@ -18,12 +18,12 @@
 	<p style="text-align: center;"> Welcome new user! Please make an account.</p>
 	<br>
 
+
 	<p> {{ error }}</p>
 
-	<form>
+	<form method="post" action = '/register/'>
 		{{ context.as_p }}
-		<button type="submit" style="float: left; margin-right: 10px ">Log In</button>
-		<button style="float: left;">Sign Up</button>
+		<button type="submit" style="float: left; margin-right: 10px ">Sign Up</button>
 	</form>
 		
 </body>

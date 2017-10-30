@@ -60,6 +60,26 @@ def validate_user(request):
 				return JsonResponse({'status_code': '200', 'auth' : json_auth ['data']['auth']})
 	return JsonResponse({'status_code': '404'})
 
+
+
+@csrf_exempt
+def register(request):
+	first_name = request.POST.get("first_name")
+	last_name = request.POST.get("last_name")
+	email = request.POST.get("email")
+	phone_number = request.POST.get("phone_number")
+	password = request.POST.get("password")
+
+	url = 'http://models-api:8000/api/v1/users/create'
+	data = {'first_name' : first_name, 'last_name': last_name, 'password': password, 'email': email, 'phone_number': phone_number}
+	data = bytes( urllib.parse.urlencode( data ).encode() )
+	handler = urllib.request.urlopen(url, data);
+	
+
+	post_feedback = handler.read().decode('utf-8')
+	resp = json.loads(post_feedback)
+	return JsonResponse(resp)
+
 @csrf_exempt
 def create_snack(request):
 	url = 'http://models-api:8000/api/v1/snacks/create'
