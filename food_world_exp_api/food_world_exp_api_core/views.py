@@ -4,6 +4,7 @@ import urllib.parse
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import hashers
 
 # Create your views here.
 
@@ -30,6 +31,7 @@ def sort(request):
 
 	return JsonResponse(return_data)
 
+
 def details(request,pk):
 	req_snack = urllib.request.Request('http://models-api:8000/api/v1/snacks/' + pk)
 	resp_snack = urllib.request.urlopen(req_snack).read().decode('utf-8')
@@ -40,15 +42,19 @@ def details(request,pk):
 
 @csrf_exempt
 def validate_user(request):
-	url = 'http://models-api:8000/api/v1/login/'
+	req_users = urllib.request.Request('http://models-api:8000/api/v1/users/')
+	resp_users = urllib.request.urlopen(req_users).read().decode('utf-8')
+	json_users = json.loads(resp_users)['data']
+
 	first_name = request.POST['first_name']
 	last_name = request.POST['last_name']
 	password = request.POST['password']
 
-	data = {'first_name' : first_name, 'last_name': last_name, 'password': password}
-	post = urllib.request.Request(url, data= data)
-	resp = json.loads(post)
-	if resp['status_code'] == "200":
-		return 'ok'
-	else:
-		return 'invalid'
+	for user in json_users:
+		if user['first_name'] == first_name and user['last_name'] == last_name and hashers.check_password(password, user['password']):
+			return JsonResponse({'status_code': '200'})
+
+
+	return JsonResponse({'status_code': '404'})
+
+

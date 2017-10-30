@@ -12,7 +12,7 @@ import food_world.settings
 
 def generateAuthenticator():
     authenticator = hmac.new(
-            key = settings.SECRET_KEY.encode('utf-8'),
+            key = food_world.settings.SECRET_KEY.encode('utf-8'),
             msg = os.urandom(32),
             digestmod = 'sha256',
         ).hexdigest()
@@ -47,7 +47,7 @@ def getWishlists(request, pk):
 
 
 def check_user_login(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         password = request.POST.get('password')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -57,8 +57,7 @@ def check_user_login(request):
             return JsonResponse({"status_code" : '200'})
         except:
             return JsonResponse({'status_code' : '404'})
-    else:
-            return JsonResponse({'status_code' : '500'})
+    return JsonResponse({'status_code' : '500'})
 
 def getUsers(request, pk):
     if request.method == "GET":
@@ -148,8 +147,9 @@ def get_all_users(request): #Only returns some user info for home screen
             email  = user.email
             phone_number = user.phone_number
             pk = user.pk
+            password = user.password
 
-            compiled_user_data = {'first_name': first_name, "last_name": last_name, "email": email, "phone_number": phone_number, "pk": pk}
+            compiled_user_data = {'first_name': first_name, "last_name": last_name, "email": email, "phone_number": phone_number, "pk": pk, 'password': password}
             
             all_users_dict.append(compiled_user_data)
             
@@ -166,16 +166,18 @@ def createUser(request):
 
 
     #### Greate Authenticator Model####
-    new_auth = Authenticator(user_id = pk, authenticator = generateAuthenticator())
-
-
-    new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number, password = hashers.make_password(password), authenticator = authenticator)
     
-    try:
-        new_user.save()
-        return JsonResponse({"status_code": "200", 'id': new_user.id})
-    except:
-        return JsonResponse({"status_code": "500"})
+
+
+    new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number, password = hashers.make_password(password))
+    new_user.save()
+    new_auth = Authenticator(user_id = new_user.pk, authenticator = 1234)
+    new_auth.save()
+    new_user.authenticator = new_auth
+    
+    
+    return JsonResponse({"status_code": "200", 'id': new_user.id})
+
 
 @csrf_exempt
 def createSnack(request):

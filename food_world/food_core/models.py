@@ -14,7 +14,7 @@ class User(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=128, default = "")
     password = models.CharField(max_length=128, default = "")
-    authenticator = models.OneToOneField("Authenticator", null = True)
+    #authenticator = models.OneToOneField("Authenticator", null = True)
 
     class Meta:
         verbose_name = "User"
@@ -69,6 +69,7 @@ class Snack(models.Model):
 
 class Authenticator(models.Model):
     user_id = models.IntegerField(default = 0)
-    authenticator = models.IntegerField(default = 0)
+    # authenticator = models.CharField(null = True, max_length = 1000)
+    #authenticator = models.IntegerField(default = 0)
     date_created = models.DateField(default=datetime.date.today)
 

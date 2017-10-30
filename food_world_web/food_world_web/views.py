@@ -47,20 +47,21 @@ def login(request):
 	# last_name = login_form.cleaned_data['last_name']
 	# password = login_form.cleaned_data['password']
 
-	url = 'http://exp-api:8000/api/v1/users/check_login/'
+	url = 'http://exp-api:8000/api/v1/login/'
 	data = {'first_name' : first_name, 'last_name': last_name, 'password': password}
-	post = urllib.request.Request(url, data= data)
-	resp = json.loads(post)
+	post = urllib.request.Request(url, data= data, headers={'Content-Type': 'application/json'})
+	post_feedback = urllib.request.urlopen(post).read().decode('utf-8')
+	resp = json.loads(post_feedback)
 	response = resp['status_code']
-	if response != 'ok':
+	if response != '200':
 	# Couldn't log them in, send them back to login page with error
 		return render(request,'login.html', {"context": login_formm })
 
 	# Set their login cookie and redirect to back to wherever they came from
-	authenticator = resp['resp']['authenticator']
+	#authenticator = resp['resp']['authenticator']
 
-	response = HttpResponseRedirect(next)
-	response.set_cookie("auth", authenticator)
+	response = HttpResponseRedirect('/register/')
+	#response.set_cookie("auth", authenticator)
 
 	return response
 
