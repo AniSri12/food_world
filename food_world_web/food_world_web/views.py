@@ -17,10 +17,15 @@ def index(request):
 	context = resp["data"]
 
 	auth = request.COOKIES.get('auth')
+
+
+
 	if not auth:
-		return render(request, 'index.html', {"context" : context, 'status': 'login', 'url': '/login/'} )
+		return render(request, 'index.html', {"context" : context, 'status': 'Login', 'url': '/login/'} )
 	else:
-		return render(request, 'index.html', {"context" : context, 'status': 'logout' , 'url': '/logout/'} )
+
+
+		return render(request, 'index.html', {"context" : context, 'status': 'Logout' , 'url': '/logout/'} )
 
 def details(request,pk):
 	req_details= urllib.request.Request('http://exp-api:8000/api/v1/snacks/' + pk)
@@ -83,7 +88,15 @@ def login(request):
 
 def logout(request):
 	response = HttpResponseRedirect(reverse('home'))
+	cookie = request.COOKIES.get('auth')
+
+	# url = 'http://models-api:8000/api/v1/auths/destroy'
+	# data = {'authenticator_token' : cookie}
+	# data = bytes( urllib.parse.urlencode( data ).encode() )
+	# handler = urllib.request.urlopen(url, data);
+
 	response.delete_cookie('auth')
+
 
 	return response
 
