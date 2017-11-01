@@ -163,23 +163,27 @@ def get_all_users(request): #Only returns some user info for home screen
 def createUser(request):
     first_name = request.POST.get("first_name", "No first_name Provided")
     last_name = request.POST.get("last_name", "No last_name Provided")
-    email  = request.POST.get("Email", "No Email Provided")
+    email  = request.POST.get("email", "No Email Provided")
     password  = request.POST.get("password")
     phone_number = request.POST.get("phone_number", "No phone_number Provided")
 
-
     #### Greate Authenticator Model####
     
+    try:
+        if User.objects.all().filter(email=email).exists() == False:
+            new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number, password = hashers.make_password(password))
+            new_user.save()
+            new_auth = Authenticator(user_id = new_user.pk, authenticator = generateAuthenticator())
+            new_auth.save()
+            new_user.authenticator = new_auth
+            return JsonResponse({"status_code": "200", 'id': new_user.id})
+        else:
+            return JsonResponse({"status_code": "500"})
 
+    except:
+        return JsonResponse({"status_code": "500"})
 
-    new_user = User(first_name = first_name, last_name = last_name, email = email, phone_number = phone_number, password = hashers.make_password(password))
-    new_user.save()
-    new_auth = Authenticator(user_id = new_user.pk, authenticator = generateAuthenticator())
-    new_auth.save()
-    new_user.authenticator = new_auth
-    
-    
-    return JsonResponse({"status_code": "200", 'id': new_user.id})
+    return JsonResponse({"status_code": "500"})
 
 
 @csrf_exempt

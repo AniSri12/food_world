@@ -15,8 +15,12 @@ def index(request):
 	resp_home= urllib.request.urlopen(req_home).read().decode('utf-8')
 	resp = json.loads(resp_home)
 	context = resp["data"]
-	return render(request, 'index.html', {"context" : context} )
 
+	auth = request.COOKIES.get('auth')
+	if not auth:
+		return render(request, 'index.html', {"context" : context, 'status': 'login', 'url': '/login/'} )
+	else:
+		return render(request, 'index.html', {"context" : context, 'status': 'logout' , 'url': '/logout/'} )
 
 def details(request,pk):
 	req_details= urllib.request.Request('http://exp-api:8000/api/v1/snacks/' + pk)
@@ -51,12 +55,11 @@ def login(request):
 		return render(request,'login.html', {"context": login_form})
 
 
-	first_name = login_form.cleaned_data['first_name']
-	last_name = login_form.cleaned_data['last_name']
+	email = login_form.cleaned_data['email']
 	password = login_form.cleaned_data['password']
 
 	url = 'http://exp-api:8000/api/v1/login/'
-	data = {'first_name' : first_name, 'last_name': last_name, 'password': password}
+	data = {'email': email,  'password': password}
 	data = bytes( urllib.parse.urlencode( data ).encode() )
 	handler = urllib.request.urlopen(url, data);
 	
@@ -71,6 +74,7 @@ def login(request):
 	# Set their login cookie and redirect to back to wherever they came from
 	authenticator = resp['auth']
 
+
 	response = HttpResponseRedirect(reverse('home'))
 	response.set_cookie("auth", authenticator)
 
@@ -80,6 +84,7 @@ def login(request):
 def logout(request):
 	response = HttpResponseRedirect(reverse('home'))
 	response.delete_cookie('auth')
+
 	return response
 
 
@@ -96,7 +101,7 @@ def register(request):
 	first_name = register_form.cleaned_data['first_name']
 	last_name = register_form.cleaned_data['last_name']
 	password = register_form.cleaned_data['password']
-	email = register_form.cleaned_data['password']
+	email = register_form.cleaned_data['email']
 	phone_number = register_form.cleaned_data['phone_number']
 
 
@@ -113,7 +118,7 @@ def register(request):
 
 	if response != '200':
 		# Couldn't log them in, send them back to login page with error
-			return render(request,'register.html', {"context": register_form, "error" : "Error! Invalid Registration"})
+			return render(request,'register.html', {"context": register_form, "error" : "Error! Email already exists!"})
 	
 	response = HttpResponseRedirect(reverse('login'))
 	return response

@@ -46,12 +46,12 @@ def validate_user(request):
 	resp_users = urllib.request.urlopen(req_users).read().decode('utf-8')
 	json_users = json.loads(resp_users)['data']
 
-	first_name = request.POST['first_name']
-	last_name = request.POST['last_name']
+
+	email = request.POST['email']
 	password = request.POST['password']
 
 	for user in json_users:
-		if user['first_name'] == first_name and user['last_name'] == last_name and hashers.check_password(password, user['password']):			
+		if user['email'] == email and hashers.check_password(password, user['password']):			
 			authenticator = urllib.request.Request('http://models-api:8000/api/v1/create_auth/' + str(user['pk']) )
 			resp_auth = urllib.request.urlopen(authenticator).read().decode('utf-8')
 			json_auth = json.loads(resp_auth)
