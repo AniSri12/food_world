@@ -182,6 +182,6 @@ def search(request):
 	snack_dict = []
 	search_results = resp['data']
 	for result in search_results:
-		snack = result["_source"]["Data"]
+		snack = result["_source"]
 		snack_dict.append(snack)
 	return render(request, 'sorted.html', {"context": snack_dict})
