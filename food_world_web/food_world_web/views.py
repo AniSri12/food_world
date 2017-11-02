@@ -85,19 +85,16 @@ def login(request):
 
 	return response
 
-
+@csrf_exempt
 def logout(request):
 	response = HttpResponseRedirect(reverse('home'))
 	cookie = request.COOKIES.get('auth')
-
-	# url = 'http://models-api:8000/api/v1/auths/destroy'
+	response.delete_cookie('auth')
+	
+	# url = 'http://models-api:8000/api/v1/destroy_auth/'
 	# data = {'authenticator_token' : cookie}
 	# data = bytes( urllib.parse.urlencode( data ).encode() )
 	# handler = urllib.request.urlopen(url, data);
-
-	response.delete_cookie('auth')
-
-
 	return response
 
 

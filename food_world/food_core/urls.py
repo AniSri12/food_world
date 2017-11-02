@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^users/check_login', views.check_user_login, name = "check_login"),
     url(r'^create_auth/(?P<pk>\d+)', views.generate_authenticator, name = "create_auth"),
     url(r'^auths/', views.getAuthenticators, name = "get_all_authenticators"),
-    url(r'^auths/destroy', views.getAuthenticators, name = "destroyAuthenticator"),
+    url(r'^destroy_auth/', views.destroyAuthenticator, name = "destroy_authenticator"),
 ]

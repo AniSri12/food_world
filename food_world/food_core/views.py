@@ -358,16 +358,13 @@ def getAuthenticators(request):
             all_auth_dict.append(compiled_auth_data)
         return JsonResponse({"status_code": 200,"data" : all_auth_dict})
 
-
+@csrf_exempt
 def destroyAuthenticator(request):
     authenticator_token = request.POST.get("authenticator_token")
     if Authenticator.objects.all().filter(authenticator=authenticator_token).exists():
-        try:
-            authenticator_to_delete = Authenticator.objects.all().filter(authenticator=authenticator_token)
-            authenticator_to_delete.delete()
-            return JsonResponse({"status_code": "200", })
-        except:
-            return JsonResponse({"status_code": "500"})
+        authenticator_to_delete = Authenticator.objects.all().filter(authenticator=authenticator_token)
+        authenticator_to_delete.delete()
+        return JsonResponse({"status_code": "200", })  
 
     return JsonResponse({"status_code": "500"})
 
