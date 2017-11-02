@@ -119,13 +119,20 @@ def create_snack(request):
 
 	return JsonResponse({'status_code': '403'})
 
+@csrf_exempt
 def search(request):
 	es = Elasticsearch(['es'])
-	if request.method == GET:
-		query = request.get.GET('request')
+	if request.method == 'POST':
+		query = request.POST.get('search_input')
 		query_results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
+
 		results = []
-		for snack in query_results['hit']['hit']:
+		for snack in query_results['hits']['hits']:
 			results.append(snack)
+
+		return JsonResponse({'status_code': '200', 'data': results})
+
+	return JsonResponse({'status_code': '500'})
+
 
 

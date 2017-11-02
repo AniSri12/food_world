@@ -11,17 +11,23 @@
 	      <a class="navbar-brand">Food World</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li><a href="/">Home</a></li>
-	      <li><a href="/snacks/sorted/">Snack by Country</a></li>
-	      <li><a href="/create_snack/">Add Snack</a></li>
-	      <li style="float: right;"><a href="/register/">Sign Up</a></li>
-	      <li style="float: right; padding-left: 350px"><a href= "{{ url }}"> {{ status }}</a></li>
+	      	<li><a href="/">Home</a></li>
+		      <li><a href="/snacks/sorted/">Snack by Country</a></li>
+		      <li><a href="/create_snack/">Add Snack</a></li>
+		      <li style="float: right;"><a href="/register/">Sign Up</a></li>
+		      <li style="float: right; padding-left: 350px"><a href= "{{ url }}"> {{ status }}</a></li>
 	      
 	    </ul>
   	</nav>
 		
 	<p style="text-align: center;"> Food Just Went Global!</p>
 	
+	<form method="post" style="float: left;" action = '/search/'> 
+	     		<input style="float: left; width: 190px;" type="text" name="search" placeholder="Search for a Yummy Candy"> 
+	     		<button type="submit" style="float: left; margin-left: 20px"> Submit</button>
+	</form>  
+	<br>
+	<br>
 	<div style="position: relative;">
 		<p style="text-align: left; font-weight: bold;margin-left: 10px"> All Snacks</p>
 		

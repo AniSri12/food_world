@@ -17,15 +17,14 @@
 	    </ul>
   	</nav>
 		
-	<p style="text-align: center;"> Search Results </p>
+	<p style="text-align: center;"> Foods Sorted by Country </p>
 	
 	<div style="position: relative;">
 		<!-- <p style="text-align: left; font-weight: bold;margin-left: 10px"> All Snacks</p> -->
 		{% for snack in context %}
 			<a href="/snacks/{{ snack.pk }}">
 			<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
-			
-				<div class="panel-heading"> {{ snack.name }}</div>
+				<div class="panel-heading"> {{ snack.name }} - {{ snack.country }}</div>
 	  			<div class="panel-body"> {{ snack.description }}</div>
 			</div>
 			</a>

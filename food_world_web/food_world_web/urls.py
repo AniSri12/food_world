@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^logout/', views.logout),
     url(r'^register/', views.register),
     url(r'^create_snack/', views.create_snack),
+    url(r'^search/', views.search),
 ]

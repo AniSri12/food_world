@@ -164,3 +164,24 @@ def create_snack(request):
 
 	return render(request, 'createSnack.html', {"context": create_Snack_form, 'return_status': "Success! Your Snack Has Been Created!"})
 
+
+@csrf_exempt
+def search(request):
+	url = 'http://exp-api:8000/api/v1/search/'
+	search_input = request.POST.get("search", "")
+	data = {'search_input' : search_input}
+	data = bytes( urllib.parse.urlencode( data ).encode() )
+	handler = urllib.request.urlopen(url, data);
+	
+	post_feedback = handler.read().decode('utf-8')
+	resp = json.loads(post_feedback)
+	response = resp['status_code']
+
+	if response != '200':
+		return HttpResponseRedirect(reverse('home'))
+	snack_dict = []
+	search_results = resp['data']
+	for result in search_results:
+		snack = result["_source"]["Data"]
+		snack_dict.append(snack)
+	return render(request, 'sorted.html', {"context": snack_dict})
