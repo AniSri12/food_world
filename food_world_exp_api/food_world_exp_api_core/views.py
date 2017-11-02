@@ -5,6 +5,8 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import hashers
+from kafka import KafkaProducer
+from elasticsearch import Elasticsearch
 
 # Create your views here.
 
@@ -96,16 +98,34 @@ def create_snack(request):
 	auth = request.POST.get("auth", "No Auth Provided")
 	for authenticator in json_auths:
 		if authenticator["authenticator"] == auth:
-			data = {'name' : name, 'description': description, 'price': price, 'nutrition_info': nutrition_info, 'country' : country}
-			data = bytes( urllib.parse.urlencode( data ).encode() )
+			data_vals = {'name' : name, 'description': description, 'price': price, 'nutrition_info': nutrition_info, 'country' : country}
+			
+			data = bytes( urllib.parse.urlencode( data_vals ).encode() )
 			handler = urllib.request.urlopen(url, data);
-	
+			
 
 			post_feedback = handler.read().decode('utf-8')
 			resp = json.loads(post_feedback)
+
+			resp['Data'] = data_vals
+
+			##### Kafka section: ######
+			producer = KafkaProducer(bootstrap_servers='kafka:9092')
+			send_new_listing = resp
+			producer.send('new-snack', json.dumps(send_new_listing).encode('utf-8'))
+			#### End of Kafka section ####
+
 			return JsonResponse(resp)
 
 	return JsonResponse({'status_code': '403'})
 
+def search(request):
+	es = Elasticsearch(['es'])
+	if request.method == GET:
+		query = request.get.GET('request')
+		query_results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
+		results = []
+		for snack in query_results['hit']['hit']:
+			results.append(snack)
 
 

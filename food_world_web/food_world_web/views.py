@@ -164,5 +164,3 @@ def create_snack(request):
 
 	return render(request, 'createSnack.html', {"context": create_Snack_form, 'return_status': "Success! Your Snack Has Been Created!"})
 
-
-

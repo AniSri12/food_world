@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
+from kafka import KafkaProducer
 import json
 from .models import User, Snack, Wishlist, Cart, Authenticator
 from django.views.decorators.csrf import csrf_exempt
@@ -197,7 +198,8 @@ def createSnack(request):
 
     try:
         new_snack.save()
-        return JsonResponse({"status_code": "200"},)
+        private_key = new_snack.pk
+        return JsonResponse({"status_code": "200", "pk": private_key },)
     except:
         return JsonResponse({"status_code": "500"})
 
