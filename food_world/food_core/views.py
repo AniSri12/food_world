@@ -72,8 +72,7 @@ def getUsers(request, pk):
         phone_number = user.phone_number
         password = user.password
 
-        if hashers.check_password(password) == False:
-            return JsonResponse({"status_code": "403"})
+       
 
         try:
             wishlist = user.wishlist.get()
