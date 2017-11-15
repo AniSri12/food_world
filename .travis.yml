@@ -8,7 +8,8 @@ install:
 - docker pull mysql:5.7.14
 - mkdir ~/db
 - docker run --name mysql -d -e MYSQL\_ROOT\_PASSWORD='\$3cureUS' -v `pwd`/db:/var/lib/mysql  mysql:5.7.14
-- docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash -c 'mysql -uroot -p'$3cureUS' -h db -e "create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';"'
+- sleep 10
+- docker run -it --name mysql-cmdline --link mysql:db mysql:5.7.14 bash -c 'mysql -uroot -p'$3cureUS' -h db -e "create user 'www'@'%' identified by '\$3cureUS'; create database cs4501 character set utf8; grant all on cs4501.* to 'www'@'%'; grant all on test_cs4501.* to 'www'@'%';"'s
 - docker rm web
 - docker run -it --name web -p 8000:8000 --link mysql:db -v ~/cs4501/app:/app tp33/django 
 - ping db
