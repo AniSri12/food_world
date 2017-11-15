@@ -34,6 +34,17 @@ web:
       - ./food_world_web:/app
    command: bash -c "mod_wsgi-express start-server --reload-on-changes --log-to-terminal ./food_world_web/wsgi.py"
 
+web2:
+   container_name: food_world_web_2
+   image: tp33/django
+   links:
+      - exp:exp-api
+   ports:
+      - "8003:8000"
+   volumes:
+      - ./food_world_web:/app
+   command: bash -c "mod_wsgi-express start-server --reload-on-changes --log-to-terminal ./food_world_web/wsgi.py"
+
 kafka:
    image: spotify/kafka
    container_name: kafka
@@ -57,3 +68,12 @@ batch:
    volumes:
       - ./batch:/app
    command: bash -c "python message_script.py"
+
+haxproxy:
+  image: haproxy:1.7
+  container_name: haproxy
+  links:
+    - web:server1
+    - web2:server2
+  volumes:
+      - ./batch:/app
