@@ -91,5 +91,5 @@ selenium-test:
     - selenium-chrome:selenium-chrome
     - web:web
   volumes:
-    - ./app/selenium:/app
+    - ./selenium:/app
   command: bash -c "pip install selenium==3.7.0"
