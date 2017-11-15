@@ -135,4 +135,15 @@ def search(request):
 	return JsonResponse({'status_code': '500'})
 
 
+@csrf_exempt
+def logout(request):
+	url = 'http://models-api:8000/api/v1/destroy_auth/'
+	cookie = request.POST.get('authenticator_token')
+	data = {'authenticator_token' : cookie}
+	data = bytes( urllib.parse.urlencode( data ).encode() )
+	handler = urllib.request.urlopen(url, data);
+
+	return JsonResponse({'status_code': '200'})
+
+
 

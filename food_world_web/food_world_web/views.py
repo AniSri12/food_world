@@ -91,10 +91,10 @@ def logout(request):
 	cookie = request.COOKIES.get('auth')
 	response.delete_cookie('auth')
 	
-	# url = 'http://models-api:8000/api/v1/destroy_auth/'
-	# data = {'authenticator_token' : cookie}
-	# data = bytes( urllib.parse.urlencode( data ).encode() )
-	# handler = urllib.request.urlopen(url, data);
+	url = 'http://exp-api:8000/api/v1/logout/'
+	data = {'authenticator_token' : cookie}
+	data = bytes( urllib.parse.urlencode( data ).encode() )
+	handler = urllib.request.urlopen(url, data);
 	return response
 
 

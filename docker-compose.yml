@@ -34,6 +34,17 @@ web:
       - ./food_world_web:/app
    command: bash -c "mod_wsgi-express start-server --reload-on-changes --log-to-terminal ./food_world_web/wsgi.py"
 
+web2:
+   container_name: food_world_web_2
+   image: tp33/django
+   links:
+      - exp:exp-api
+   ports:
+      - "8003:8000"
+   volumes:
+      - ./food_world_web:/app
+   command: bash -c "mod_wsgi-express start-server --reload-on-changes --log-to-terminal ./food_world_web/wsgi.py"
+
 kafka:
    image: spotify/kafka
    container_name: kafka
@@ -57,3 +68,28 @@ batch:
    volumes:
       - ./batch:/app
    command: bash -c "python message_script.py"
+
+haxproxy2:
+  image: haproxy2
+  container_name: haproxy2
+  links:
+    - web:server1
+    - web2:server2
+  volumes:
+      - .:/app
+selenium-chrome:
+  image: selenium/standalone-chrome
+  container_name: selenium-chrome
+  links:
+    - web:web
+  ports:
+    - "4444:4444"
+selenium-test:
+  image: tp33/django
+  container_name: selenium-test
+  links:
+    - selenium-chrome:selenium-chrome
+    - web:web
+  volumes:
+    - ./app/selenium:/app
+  command: bash -c "pip install selenium==3.7.0"
