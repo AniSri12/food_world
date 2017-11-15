@@ -69,11 +69,11 @@ batch:
       - ./batch:/app
    command: bash -c "python message_script.py"
 
-haxproxy:
-  image: haproxy:1.7
-  container_name: haproxy
+haxproxy2:
+  image: haproxy2
+  container_name: haproxy2
   links:
     - web:server1
     - web2:server2
   volumes:
-      - ./batch:/app
+      - .:/app
