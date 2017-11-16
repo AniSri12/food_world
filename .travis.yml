@@ -14,5 +14,6 @@ install:
 - docker build -t haproxy2 .
 - cd ..
 script:
+- ls
 - docker-compose up -d
 - docker exec -it food_world bash -c "cd food_world && cd food_world && ./manage.py test"
