@@ -16,6 +16,4 @@ install:
 script:
 - ls
 - docker-compose up -d
-- cd food_world
-- ls
-- docker exec -it food_world bash -c "cd food_world && ./manage.py test"
+- docker exec -it food_world bash -c "cd food_world && python manage.py test"
