@@ -4,30 +4,20 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 
 
-driver = webdriver.Remote(
-   command_executor='http://selenium-chrome:4444/wd/hub',
-   desired_capabilities=DesiredCapabilities.CHROME)
-
-driver.get("http://web:8000")
-
-sign_up = driver.find_element_by_xpath('/html/body/nav/div/ul/li[4]/a')
-sign_up.click()
-print(sign_up)
-print(driver.current_url)
 
 class foodworldTest(unittest.TestCase):
 
-    def setUp(self):
-	    self.driver = webdriver.Remote(
-	       command_executor='http://selenium-chrome:4444/wd/hub',
-	       desired_capabilities=DesiredCapabilities.CHROME)
+	def setUp(self):
+		self.driver = webdriver.Remote(
+		   command_executor='http://selenium-chrome:4444/wd/hub',
+		   desired_capabilities=DesiredCapabilities.CHROME)
 	   
 
-    def tearDown(self):
-        self.driver.quit()
+	def tearDown(self):
+		self.driver.quit()
 
-    def test_signin(self):
-    	driver.get("http://web:8000") # Start 
+	def test_signin(self):
+		self.driver.get("http://web:8000") # Start 
 		sign_up = self.driver.find_element_by_xpath('/html/body/nav/div/ul/li[4]/a')
 		sign_up.click()
 
@@ -35,7 +25,7 @@ class foodworldTest(unittest.TestCase):
 		first_name.send_keys("Chad")
 
 		last_name = self.driver.find_element_by_xpath('//*[@id="id_last_name"]')
-		last_name = self.send_keys("Mango")
+		last_name.send_keys("Mango")
 		email = self.driver.find_element_by_xpath('//*[@id="id_email"]')
 		email.send_keys("mango@chad.com")
 		password = self.driver.find_element_by_xpath('//*[@id="id_password"]')
@@ -43,7 +33,7 @@ class foodworldTest(unittest.TestCase):
 		phone_number = self.driver.find_element_by_xpath('//*[@id="id_phone_number"]')
 		phone_number.send_keys("123-456-6789")
 
-		sign_up_button = self.driver.find_element_by_xpath('//*[@id="id_phone_number"]')
+		sign_up_button = self.driver.find_element_by_xpath('/html/body/form/button')
 		sign_up_button.click()
 
 		email_login = self.driver.find_element_by_xpath('//*[@id="id_email"]')
@@ -52,21 +42,24 @@ class foodworldTest(unittest.TestCase):
 		pass_login.send_keys("abc123")
 
 		login_butt = self.driver.find_element_by_xpath('/html/body/form/button[1]')
+		self.driver.implicitly_wait(10)
 		login_butt.click()
+		self.driver.implicitly_wait(10)
 
 		logout_button = self.driver.find_element_by_xpath('/html/body/nav/div/ul/li[5]/a')
 		self.assertEquals(logout_button.text, "Logout")
 
 	def test_addsnack(self):
-		driver.get("http://web:8000") # Start 
+		self.driver.get("http://web:8000") # Start 
 		sign_up = self.driver.find_element_by_xpath('/html/body/nav/div/ul/li[4]/a')
 		sign_up.click()
+		self.driver.implicitly_wait(10)
 
 		first_name = self.driver.find_element_by_xpath('//*[@id="id_first_name"]')
 		first_name.send_keys("Chado")
 
 		last_name = self.driver.find_element_by_xpath('//*[@id="id_last_name"]')
-		last_name = self.send_keys("Mangoy")
+		last_name.send_keys("Mangoy")
 		email = self.driver.find_element_by_xpath('//*[@id="id_email"]')
 		email.send_keys("money@cnn.com")
 		password = self.driver.find_element_by_xpath('//*[@id="id_password"]')
@@ -74,7 +67,7 @@ class foodworldTest(unittest.TestCase):
 		phone_number = self.driver.find_element_by_xpath('//*[@id="id_phone_number"]')
 		phone_number.send_keys("123-456-6789")
 
-		sign_up_button = self.driver.find_element_by_xpath('//*[@id="id_phone_number"]')
+		sign_up_button = self.driver.find_element_by_xpath('/html/body/form/button')
 		sign_up_button.click()
 
 		email_login = self.driver.find_element_by_xpath('//*[@id="id_email"]')
@@ -85,8 +78,9 @@ class foodworldTest(unittest.TestCase):
 		login_butt = self.driver.find_element_by_xpath('/html/body/form/button[1]')
 		login_butt.click()
 
-		add_snack = self.drive.find_element_by_xpath("/html/body/nav/div/ul/li[3]/a")
+		add_snack = self.driver.find_element_by_xpath("/html/body/nav/div/ul/li[3]/a")
 		add_snack.click()
+		self.driver.implicitly_wait(10)
 
 		name = self.driver.find_element_by_xpath('//*[@id="id_name"]')
 		name.send_keys("Apples")
@@ -112,10 +106,6 @@ class foodworldTest(unittest.TestCase):
 		self.assertEquals(success_message.text, "Success! Your Snack Has Been Created!")
 
 
-
-
-
-
 	def test_register(self):
 		self.driver.get("http://web:8000") # Start 
 		sign_up = self.driver.find_element_by_xpath('/html/body/nav/div/ul/li[4]/a')
@@ -125,28 +115,34 @@ class foodworldTest(unittest.TestCase):
 		first_name.send_keys("Chad")
 
 		last_name = self.driver.find_element_by_xpath('//*[@id="id_last_name"]')
-		last_name = self.send_keys("Mango")
+		last_name.send_keys("Mango")
+
 		email = self.driver.find_element_by_xpath('//*[@id="id_email"]')
 		email.send_keys("chad@mango.com")
+
 		password = self.driver.find_element_by_xpath('//*[@id="id_password"]')
 		password.send_keys("123abc")
 		phone_number = self.driver.find_element_by_xpath('//*[@id="id_phone_number"]')
 		phone_number.send_keys("123-456-6789")
 
-		sign_up_button = self.driver.find_element_by_xpath('//*[@id="id_phone_number"]')
+		sign_up_button = self.driver.find_element_by_xpath('/html/body/form/button')
 		sign_up_button.click()
 
-		self.assertEqual(driver.currnel_url, "http://localhost:8000/login/")
+		self.driver.implicitly_wait(10)
+
+		self.assertEqual(self.driver.current_url, "http://web:8000/login/")
+
 	def test_viewitem(self):
 		self.driver.get("http://web:8000")
 		tea = self.driver.find_element_by_xpath('/html/body/div[1]/a[2]/div/div[1]')
 		tea.click()
 		info = self.driver.find_element_by_xpath('/html/body/div[1]/div')
-		print(info.text)
-		self.assertEquals(info.text, Choice Organic Russian Caravan Black Tea)
+		self.assertEquals(info.text, "Choice Organic Russian Caravan Black Tea")
 
-            
-    
+if __name__ == "__main__":
+	unittest.main()
+			
+	
 
 # class PythonOrgSearch(unittest.TestCase):
 
@@ -166,5 +162,3 @@ class foodworldTest(unittest.TestCase):
 #     def tearDown(self):
 #         self.driver.close()
 
-# if __name__ == "__main__":
-#     unittest.main()

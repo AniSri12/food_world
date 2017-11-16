@@ -18,7 +18,7 @@ def index(request):
 
 	auth = request.COOKIES.get('auth')
 
-
+	print("indexed")
 
 	if not auth:
 		return render(request, 'index.html', {"context" : context, 'status': 'Login', 'url': '/login/'} )
