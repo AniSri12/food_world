@@ -92,4 +92,4 @@ selenium-test:
     - web:web
   volumes:
     - ./selenium:/app
-  command: bash -c "pip install selenium==3.7.0"
+  command: bash -c "pip install selenium==3.7.0 && python front_end.py"
