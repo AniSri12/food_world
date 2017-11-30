@@ -17,15 +17,14 @@ def index(request):
 	context = resp["data"]
 
 	auth = request.COOKIES.get('auth')
+	pk = request.COOKIES.get('pk')
 
 	print("indexed")
 
 	if not auth:
 		return render(request, 'index.html', {"context" : context, 'status': 'Login', 'url': '/login/'} )
 	else:
-
-
-		return render(request, 'index.html', {"context" : context, 'status': 'Logout' , 'url': '/logout/'} )
+		return render(request, 'index.html', {"context" : context, 'status': 'Logout' , 'url': '/logout/','pk': pk } )
 
 def details(request,pk):
 	req_details= urllib.request.Request('http://exp-api:8000/api/v1/snacks/' + pk)
@@ -78,11 +77,12 @@ def login(request):
 
 	# Set their login cookie and redirect to back to wherever they came from
 	authenticator = resp['auth']
+	user_id = resp['pk']
 
 
 	response = HttpResponseRedirect(reverse('home'))
 	response.set_cookie("auth", authenticator)
-
+	response.set_cookie("pk", user_id)
 	return response
 
 @csrf_exempt

@@ -59,7 +59,8 @@ def validate_user(request):
 			json_auth = json.loads(resp_auth)
 
 			if json_auth ['status_code'] == '200':
-				return JsonResponse({'status_code': '200', 'auth' : json_auth ['data']['auth']})
+				return JsonResponse({'status_code': '200', 'auth' : json_auth ['data']['auth'], 'pk': user['pk']})
+	
 	return JsonResponse({'status_code': '404'})
 
 
