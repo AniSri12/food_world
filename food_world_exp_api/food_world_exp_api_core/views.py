@@ -39,6 +39,12 @@ def details(request,pk):
 	resp_snack = urllib.request.urlopen(req_snack).read().decode('utf-8')
 	json_snack = json.loads(resp_snack)
 	return_data = {"status_code:": 200, "data": {"snack": json_snack}}
+
+	# Kafka for item and user id, NEED TO GET USER ID
+	producer = KafkaProducer(bootstrap_servers='kafka:9092')
+	send_new_detail = {"item-id": pk} 
+	producer.send('spark-job', json.dumps(send_new_detail).encode('utf-8'))
+
 	return JsonResponse(return_data)
 
 

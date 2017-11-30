@@ -69,6 +69,13 @@ batch:
       - ./batch:/app
    command: bash -c "python message_script.py"
 
+batch_spark:
+   image: tp33/django
+   container_name: batch_spark
+   links:
+      - kafka:kafka
+   volumes:
+      - ./batch_spark:/app
 haxproxy2:
   image: haproxy2
   container_name: haproxy2
