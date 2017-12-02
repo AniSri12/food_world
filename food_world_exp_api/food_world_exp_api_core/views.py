@@ -40,12 +40,18 @@ def details(request,pk):
 	json_snack = json.loads(resp_snack)
 	return_data = {"status_code:": 200, "data": {"snack": json_snack}}
 
-	# Kafka for item and user id, NEED TO GET USER ID
+	#user_pk = request.POST.get('user-pk')
+	item_pk = pk
+	user_pk = request.COOKIES.get('pk')
 	producer = KafkaProducer(bootstrap_servers='kafka:9092')
-	send_new_detail = {"item-id": pk} 
+	send_new_detail = {"item_pk": item_pk, "user_pk": user_pk} 
 	producer.send('spark-job', json.dumps(send_new_detail).encode('utf-8'))
-
+	# Kafka for item and user id, NEED TO GET USER ID
 	return JsonResponse(return_data)
+
+
+
+
 
 
 @csrf_exempt

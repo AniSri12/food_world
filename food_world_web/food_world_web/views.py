@@ -30,6 +30,17 @@ def details(request,pk):
 	req_details= urllib.request.Request('http://exp-api:8000/api/v1/snacks/' + pk)
 	resp_details= urllib.request.urlopen(req_details).read().decode('utf-8')
 	resp = json.loads(resp_details)
+	
+
+	# url = 'http://exp-api:8000/api/v1/snacks/' + pk
+	# data = {'user-pk': user_pk,  'item-pk': pk}
+	# data = bytes( urllib.parse.urlencode( data ).encode() )
+	# handler = urllib.request.urlopen(url, data);
+	
+	# post_feedback = handler.read().decode('utf-8')
+	# resp = json.loads(post_feedback)
+	# response = resp['status_code']
+
 	context = resp["data"]
 	return render(request, 'details.html', {"context" : context })
 
