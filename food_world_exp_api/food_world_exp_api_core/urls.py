@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^create_snack/', views.create_snack),
     url(r'^search/', views.search),
     url(r'^logout/', views.logout),
+    url(r'^reccomendation/', views.reccomendation),
 ]

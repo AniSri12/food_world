@@ -34,22 +34,20 @@ def sort(request):
 	return JsonResponse(return_data)
 
 
+@csrf_exempt
 def details(request,pk):
 	req_snack = urllib.request.Request('http://models-api:8000/api/v1/snacks/' + pk)
 	resp_snack = urllib.request.urlopen(req_snack).read().decode('utf-8')
 	json_snack = json.loads(resp_snack)
+	#user_pk = request.COOKIES.get('pk', "0")
+	#send_new_detail = {"item_id": pk, 'user_id': user_pk}
 	return_data = {"status_code:": 200, "data": {"snack": json_snack}}
 
-	#user_pk = request.POST.get('user-pk')
-	item_pk = pk
-	user_pk = request.COOKIES.get('pk')
-	producer = KafkaProducer(bootstrap_servers='kafka:9092')
-	send_new_detail = {"item_pk": item_pk, "user_pk": user_pk} 
-	producer.send('spark-job', json.dumps(send_new_detail).encode('utf-8'))
 	# Kafka for item and user id, NEED TO GET USER ID
+	#producer = KafkaProducer(bootstrap_servers='kafka:9092')
+	#producer.send('spark-job', json.dumps(send_new_detail).encode('utf-8'))
+
 	return JsonResponse(return_data)
-
-
 
 
 
