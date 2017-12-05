@@ -1,7 +1,6 @@
-
-
-
 from pyspark import SparkContext
+import MySQLdb
+import time
 def findPairs(itemsList):
 	pairs = []
 	for item in itemsList:
@@ -14,6 +13,9 @@ def switchKey(userPairs):
 	for pair in userPairs[1]:
 		newPair = (pair,userPairs[0])
 		yield newPair
+
+db=_mysql.connect(host='db',user="www", passwd="$3cureUS",db="cs4501")
+
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 

@@ -73,3 +73,8 @@ class Authenticator(models.Model):
     #authenticator = models.IntegerField(default = 0)
     date_created = models.DateField(default=datetime.date.today)
 
+
+class Reccomendation(models.Model):
+    item_id = models.IntegerField(default = 0)
+    recommended_items = models.CharField(max_length=128)
+
