@@ -1,4 +1,3 @@
-from elasticsearch import Elasticsearch
 from kafka import KafkaConsumer
 import json
 print('running....')
