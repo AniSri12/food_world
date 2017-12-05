@@ -15,7 +15,7 @@ def switchKey(userPairs):
 		yield newPair
 
 db=_mysql.connect(host='db',user="www", passwd="$3cureUS",db="cs4501")
-
+c=db.cursor()
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 
