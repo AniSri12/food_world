@@ -51,6 +51,17 @@ def details(request,pk):
 
 
 
+@csrf_exempt
+def reccomendation(request):
+# Kafka for item and user id, NEED TO GET USER ID
+	user_id = request.POST.get("user_id")
+	item_id = request.POST.get("item_id")
+	send_new_detail = {"item_id": item_id, 'user_id': user_id}
+	producer = KafkaProducer(bootstrap_servers='kafka:9092')
+	producer.send('spark-job', json.dumps(send_new_detail).encode('utf-8'))
+
+	return JsonResponse(send_new_detail)
+
 
 @csrf_exempt
 def validate_user(request):
