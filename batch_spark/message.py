@@ -16,10 +16,10 @@ while not consumer:
 
 for message in consumer:
 	print('FOUND!')
-	log = open('log.txt', 'w')
+	log = open('log.txt', 'a')
 	print(json.loads((message.value).decode('utf-8')))
 	some_new_snack = json.loads((message.value).decode('utf-8'))
 	user = some_new_snack['user_id']
 	item = some_new_snack['item_id']
-	log.write(str(user) + "		" + str(item) + "\n")
+	log.write(str(user) + "	" + str(item))
 	log.close()
