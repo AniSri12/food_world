@@ -1,11 +1,15 @@
 from pyspark import SparkContext
-import MySQLdb
+import MySQLdb as mysql
 import time
 def findPairs(itemsList):
 	pairs = []
 	for item in itemsList:
 		for item2 in itemsList:
-			if (item != item2) & ((item,item2) not in pairs)& ((item2,item) not in pairs):
+			if (int(item) > int(item2)):
+				tmp = item
+				item = item2
+				item2=item
+			if (item != item2) & ((item,item2) not in pairs):
 				pairs.append((item,item2))
 	return pairs
 
@@ -14,8 +18,10 @@ def switchKey(userPairs):
 		newPair = (pair,userPairs[0])
 		yield newPair
 
-db=_mysql.connect(host='db',user="www", passwd="$3cureUS",db="cs4501")
+
+db=mysql.connect(host='db', user="www", passwd="$3cureUS",db="cs4501")
 c=db.cursor()
+c.execute('TRUNCATE TABLE food_world_reccomendation')
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 
@@ -26,7 +32,7 @@ pages = pairs.map(lambda pair: (pair[0], pair[1]))      # re-layout the data to 
 #count = pages.reduceByKey(lambda x,y: int(x)+int(y))        # shuffle the data so that each key is only on one worker
                                               # and then reduce all the values by adding them together
 pages = pages.groupByKey()
-
+print(itempairs[1])
 pages = pages.map(lambda itempairs: (itempairs[0], findPairs(itempairs[1])))
 
 pages = pages.flatMap(switchKey) 
@@ -34,14 +40,37 @@ pages = pages.flatMap(switchKey)
 
 pages = pages.groupByKey()
 
-output = list(pages.collect())                  # bring the data back to the master node so we can print it out
-for pair in output:
 
-	print(pair)
-	#print ("pair %s" % (pair))
-	#print (" user %s" % (user_id))
-    #for itm in items:
-   #	print("items: %s"% (itm))
+
+pages = pages.filter(lambda itempairs: len(itempairs[1]) >= 3)
+
+output = pages.collect()
+
+three_or_more = []
+for pair,users in output:
+	print("PAir:",pair)
+	three_or_more.append(pair)
+	for usr in users:
+		print("user: %s"% (usr))
+		print ("Popular items done")
+
+rec_dict = {}
+for rec in three_or_more:
+    tup = rec
+    item1 = tup[0]
+    item2 = tup[1]
+    if item1 not in rec_dict.keys():
+        rec_dict[item1]  = str(item2)
+    elif item1 in rec_dict.keys() and str(item2) not in rec_dict[item1]:
+        rec_dict[item1] += "," + str(item2)
+    if item2 not in rec_dict.keys():
+        rec_dict[item2]  = str(item1)
+    elif item2 in rec_dict.keys() and str(item1) not in rec_dict[item2]:
+        rec_dict[item2] += "," + str(item1)
+
+for key, value in rec_dict:
+	c.execute('INSERT INTO Reccomendation(item_id, recommended_items) VALUES (%d, %s)', int(key), value )
+
 print ("Popular items done")
-
+c.close()
 sc.stop()

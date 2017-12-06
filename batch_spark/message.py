@@ -1,6 +1,8 @@
 from kafka import KafkaConsumer
 import json
 print('running....')
+import os 
+dir_path = os.path.abspath("logs.log")
 
 
 es = None
@@ -15,7 +17,7 @@ while not consumer:
 
 for message in consumer:
 	print('FOUND!')
-	log = open('log.txt', 'a')
+	log = open(dir_path, 'a')
 	print(json.loads((message.value).decode('utf-8')))
 	some_new_snack = json.loads((message.value).decode('utf-8'))
 	user = some_new_snack['user_id']
