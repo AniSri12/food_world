@@ -370,3 +370,20 @@ def destroyAuthenticator(request):
     return JsonResponse({"status_code": "500"})
 
 
+
+def getRecco(request):
+    if request.method == "GET":
+        all_recco_dict = []
+        try:
+            reccos = Reccomendation.objects.all()
+        except:
+            return JsonResponse({"status_code": "404"})
+
+        for recco in reccos:
+            item_id = reccos.item_id
+            recommended_items = reccos.recommended_items
+
+            compiled_snack_data = {"item_id": item_id, recommended_items: "recommended_items"}
+            all_recco_dict.append(compiled_snack_data)
+        return JsonResponse({"status_code": 200,"data" : all_recco_dict})
+
