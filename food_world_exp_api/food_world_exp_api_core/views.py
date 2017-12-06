@@ -50,6 +50,13 @@ def details(request,pk):
 	return JsonResponse(return_data)
 
 
+def recs(request, pk):
+	req_recs = urllib.request.Request('http://models-api:8000/api/v1/recs/' + pk)
+	resp_recs = urllib.request.urlopen(req_recs).read().decode('utf-8')
+	json_recs = json.loads(resp_recs)
+	return_data = {"status_code:": 200, "data": {"recs": json_recs['data']}}
+	return JsonResponse(return_data)
+
 
 @csrf_exempt
 def reccomendation(request):

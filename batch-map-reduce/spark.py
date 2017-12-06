@@ -21,7 +21,7 @@ def switchKey(userPairs):
 
 db=mysql.connect(host='db', user="www", passwd="$3cureUS",db="cs4501")
 c=db.cursor()
-c.execute('TRUNCATE TABLE food_world_reccomendation')
+c.execute('TRUNCATE TABLE food_core_reccomendation')
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 
@@ -32,7 +32,6 @@ pages = pairs.map(lambda pair: (pair[0], pair[1]))      # re-layout the data to 
 #count = pages.reduceByKey(lambda x,y: int(x)+int(y))        # shuffle the data so that each key is only on one worker
                                               # and then reduce all the values by adding them together
 pages = pages.groupByKey()
-print(itempairs[1])
 pages = pages.map(lambda itempairs: (itempairs[0], findPairs(itempairs[1])))
 
 pages = pages.flatMap(switchKey) 
@@ -46,9 +45,10 @@ pages = pages.filter(lambda itempairs: len(itempairs[1]) >= 3)
 
 output = pages.collect()
 
+
 three_or_more = []
 for pair,users in output:
-	print("PAir:",pair)
+	print("HELLO:",pair)
 	three_or_more.append(pair)
 	for usr in users:
 		print("user: %s"% (usr))
@@ -67,10 +67,11 @@ for rec in three_or_more:
         rec_dict[item2]  = str(item1)
     elif item2 in rec_dict.keys() and str(item1) not in rec_dict[item2]:
         rec_dict[item2] += "," + str(item1)
-
-for key, value in rec_dict:
-	c.execute('INSERT INTO Reccomendation(item_id, recommended_items) VALUES (%d, %s)', int(key), value )
-
-print ("Popular items done")
+print(rec_dict)
+for key, value in rec_dict.items():
+	print(key + " " + value)
+	c.execute("""INSERT INTO food_core_reccomendation(item_id, recommended_items) VALUES (%s, %s)""", (key, value))
+	db.commit()
+print("Popular items done")
 c.close()
 sc.stop()

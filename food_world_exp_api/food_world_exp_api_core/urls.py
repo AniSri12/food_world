@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^search/', views.search),
     url(r'^logout/', views.logout),
     url(r'^reccomendation/', views.reccomendation),
+    url(r'^recs/(?P<pk>\d+)', views.recs),
 ]

@@ -32,13 +32,22 @@ def details(request,pk):
 	resp = json.loads(resp_details)
 	context = resp["data"]
 	user_pk = request.COOKIES.get('pk')
+	
+	rec_details= urllib.request.Request('http://exp-api:8000/api/v1/recs/' + pk)
+	resp_details_r= urllib.request.urlopen(rec_details).read().decode('utf-8')
+	resp = json.loads(resp_details_r)
+	reccomended_items = resp['data']
+	# rec_data = d['recs']
+	# reccomended_items = rec_data['recommended_items']	
+
+
 
 	url = 'http://exp-api:8000/api/v1/reccomendation/'
 	data = {'user_id': user_pk,  'item_id': pk}
 	data = bytes( urllib.parse.urlencode( data ).encode() )
 	handler = urllib.request.urlopen(url, data);
 
-	return render(request, 'details.html', {"context" : context })
+	return render(request, 'details.html', {"context" : context, 'reccomended_items': reccomended_items })
 
 def sort(request):
 	req_details= urllib.request.Request('http://exp-api:8000/api/v1/sorted/')

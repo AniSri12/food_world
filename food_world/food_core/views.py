@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from kafka import KafkaProducer
 import json
-from .models import User, Snack, Wishlist, Cart, Authenticator
+from .models import User, Snack, Wishlist, Cart, Authenticator, Reccomendation
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 from django.contrib.auth import hashers
@@ -371,19 +371,18 @@ def destroyAuthenticator(request):
 
 
 
-def getRecco(request):
+def getRecs(request, pk):
     if request.method == "GET":
         all_recco_dict = []
-        try:
-            reccos = Reccomendation.objects.all()
-        except:
-            return JsonResponse({"status_code": "404"})
+       
+        reccos = Reccomendation.objects.all().get(item_id = pk)
+        
 
-        for recco in reccos:
-            item_id = reccos.item_id
-            recommended_items = reccos.recommended_items
+       
+        item_id = reccos.item_id
+        recommended_items = reccos.recommended_items
 
-            compiled_snack_data = {"item_id": item_id, recommended_items: "recommended_items"}
-            all_recco_dict.append(compiled_snack_data)
-        return JsonResponse({"status_code": 200,"data" : all_recco_dict})
+        compiled_rec_data = {"item_id": item_id, 'recommended_items': recommended_items}
+
+        return JsonResponse({"status_code": 200,"data" : compiled_rec_data})
 
