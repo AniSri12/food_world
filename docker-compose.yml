@@ -75,8 +75,8 @@ batch_spark:
    links:
       - kafka:kafka
    volumes:
-      - ./batch_spark:/app
-   command: bash -c "python message.py"
+      - ~/cs4501/app:/app
+   command: bash -c "python /app/food_world/batch_spark/message.py"
 haxproxy2:
   image: haproxy2
   container_name: haproxy2
@@ -85,22 +85,22 @@ haxproxy2:
     - web2:server2
   volumes:
       - .:/app
-selenium-chrome:
-  image: selenium/standalone-chrome
-  container_name: selenium-chrome
-  links:
-    - web:web
-  ports:
-    - "4444:4444"
-selenium-test:
-  image: tp33/django
-  container_name: selenium-test
-  links:
-    - selenium-chrome:selenium-chrome
-    - web:web
-  volumes:
-    - ./selenium:/app
-  command: bash -c "pip install selenium==3.7.0 && python front_end.py"
+# selenium-chrome:
+#   image: selenium/standalone-chrome
+#   container_name: selenium-chrome
+#   links:
+#     - web:web
+#   ports:
+#     - "4444:4444"
+# selenium-test:
+#   image: tp33/django
+#   container_name: selenium-test
+#   links:
+#     - selenium-chrome:selenium-chrome
+#     - web:web
+#   volumes:
+#     - ./selenium:/app
+#   command: bash -c "pip install selenium==3.7.0 && python front_end.py"
 
 spark-master:
   image: gettyimages/spark
