@@ -374,10 +374,10 @@ def destroyAuthenticator(request):
 def getRecs(request, pk):
     if request.method == "GET":
         all_recco_dict = []
-       
-        reccos = Reccomendation.objects.all().get(item_id = pk)
-        
-
+        try:
+            reccos = Reccomendation.objects.all().get(item_id = pk)
+        except:
+            return JsonResponse({"status_code": '404'})
        
         item_id = reccos.item_id
         recommended_items = reccos.recommended_items

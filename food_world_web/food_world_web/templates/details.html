@@ -29,15 +29,30 @@
 					<div class="panel-heading"> ${{context.snack.data.price }}</div>
 					<div class="panel-heading"> Nutrition info: {{ context.snack.data.nutrition_info }}</div>
 					<div class="panel-heading"> Country: {{ context.snack.data.country }}</div>
-		  		
+		  		</div>
 	{% else %}
 		<p> Whoops! This item does not exist. </p>	
 	{% endif %}
+
+	<br>
 		
-	<p> Hey Srikanth, you look pretty hungry...here are some snacks other users were interested in! </p>
+	<p> Hey Srikanth, you look pretty hungry...here are some snacks you might be interested in! </p>
+
+
 
 	{% for rec in reccomended_items %}
-		<p> {{ reccomended_items }} </p>
+			<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
+
+		<div class="panel-heading"> 
+		{{ rec.name }}
+		</div>
+		</div>
+				<div class="panel panel-info" style="margin:0;text-align:center;width: 30%;float: left; margin: 10px">
+					<div class="panel-heading"> Info: {{ rec.description }}</div>
+					<div class="panel-heading"> ${{rec.price }}</div>
+					<div class="panel-heading"> Nutrition info: {{ rec.nutrition_info }}</div>
+					<div class="panel-heading"> Country: {{ rec.country }}</div>
+		  		</div>
 	{% endfor %}
 	
 </html>

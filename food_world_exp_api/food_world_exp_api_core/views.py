@@ -54,7 +54,19 @@ def recs(request, pk):
 	req_recs = urllib.request.Request('http://models-api:8000/api/v1/recs/' + pk)
 	resp_recs = urllib.request.urlopen(req_recs).read().decode('utf-8')
 	json_recs = json.loads(resp_recs)
-	return_data = {"status_code:": 200, "data": {"recs": json_recs['data']}}
+	
+	all_rec_obj = []
+	if json_recs['status_code'] != '404':
+		data = json_recs['data']
+		recs = (data['recommended_items']).split(',')
+		for reccomendation in  recs:
+			req_snack = urllib.request.Request('http://models-api:8000/api/v1/snacks/' + reccomendation)
+			resp_snack = urllib.request.urlopen(req_snack).read().decode('utf-8')
+			json_snack = json.loads(resp_snack)
+			all_rec_obj.append(json_snack['data'])
+
+
+	return_data = {"status_code:": 200, "data": all_rec_obj }
 	return JsonResponse(return_data)
 
 

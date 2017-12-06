@@ -22,6 +22,7 @@ def switchKey(userPairs):
 db=mysql.connect(host='db', user="www", passwd="$3cureUS",db="cs4501")
 c=db.cursor()
 c.execute('TRUNCATE TABLE food_core_reccomendation')
+db.commit()
 
 sc = SparkContext("spark://spark-master:7077", "PopularItems")
 
